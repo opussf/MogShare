@@ -1,4 +1,4 @@
-<project name="Rested" default="package">
+<project name="MogShare" default="package">
 	<!-- version 7.1 -->
 
 	<tstamp/>
@@ -129,7 +129,6 @@
 				<patternset refid="imgFiles"/>
 			</fileset>
 		</copy>
-		<chmod perm="ugo+x" dir="${addon.dir}" includes="Rested_*.lua" />
 		<echo>Deployed ${version.number} locally</echo>
 	</target>
 

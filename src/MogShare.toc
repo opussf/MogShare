@@ -7,11 +7,5 @@
 ## SavedVariables: MS_Data
 ## SavedVariablesPerCharacter:
 
-localization/core.lua
-localization/de.lua
-localization/es.lua
-localization/fr.lua
-localization/pt.lua
-localization/ru.lua
 MogShare.lua
 MogShare.xml
