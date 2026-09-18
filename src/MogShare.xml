@@ -6,10 +6,10 @@
 	<Frame name="MogShareFrame" toplevel="false" parent="UIParent" enableMouse="false" movable="false">
 		<Scripts>
 			<OnLoad>
-				MogShare.OnLoad()
+				MS.OnLoad()
 			</OnLoad>
 			<OnEvent>
-				MogShare[event]( ... )
+				MS[event]( ... )
 			</OnEvent>
 		</Scripts>
 	</Frame>
