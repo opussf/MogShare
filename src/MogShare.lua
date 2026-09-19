@@ -62,16 +62,22 @@ function MS.INSPECT_READY(guid)
 	if guid == MS.pendingGUID then
 		MS_Data[guid] = MS_Data[guid] or {}
 		MS_Data[guid].name, MS_Data[guid].realm = UnitName("target")
+		MS_Data[guid].realm = MS_Data[guid].realm or GetRealmName()
 
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
-		-- MS_Data[guid].mogList = targetMogList
+		MS_Data[guid].mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
+		print(MS_Data[guid].name, MS_Data[guid].realm, MS_Data[guid].mogLink)
+		print(GetItemTransmogInfoList(targetMogList))
+
 
 		for _, token in ipairs(MS.slotTokens) do
 			local slotID = GetInventorySlotInfo(token)
 
 			local slotAppearanceID = targetMogList[slotID].appearanceID
+			local slotIllusionID = targetMogList[slotID].illusionID
 
 			MS_Data[guid][MS.slotNames[slotID].."_appearanceID"] = slotAppearanceID
+			MS_Data[guid][MS.slotNames[slotID].."_illusionID"] = slotIllusionID
 
 			local sourceItemInfo = C_TransmogCollection.GetSourceInfo(slotAppearanceID)
 			if sourceItemInfo then
@@ -82,10 +88,15 @@ function MS.INSPECT_READY(guid)
 				item:ContinueOnItemLoad(function()
 					local itemName, itemLink = C_Item.GetItemInfo( sourceItemID )
 					MS_Data[guid][MS.slotNames[slotID].."_sourceItemName"] = itemName
-					print(token, slotID or "nil", MS.slotNames[slotID], itemLink)
+					-- print(token, slotID or "nil", MS.slotNames[slotID], itemLink)
 				end)
 			end
 		end
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
+	end
+end
+function MS.Command(msg)
+	for guid, data in pairs(MS_Data) do
+		print(string.format("%s - %s:%s", MS_Data[guid].mogLink, MS_Data[guid].name, MS_Data[guid].realm))
 	end
 end
