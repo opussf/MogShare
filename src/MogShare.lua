@@ -78,63 +78,13 @@ function MS.INSPECT_READY(guid)
 				local sourceItemID = sourceItemInfo.itemID
 				MS_Data[guid][MS.slotNames[slotID].."_sourceItemID"] = sourceItemID
 
-				local itemName, itemLink = C_Item.GetItemInfo( sourceItemID )
-				MS_Data[guid][MS.slotNames[slotID].."_sourceItemName"] = itemName
-
-				print(token, slotID or "nil", MS.slotNames[slotID], itemLink)
+				local item = Item:CreateFromItemID(sourceItemID)
+				item:ContinueOnItemLoad(function()
+					local itemName, itemLink = C_Item.GetItemInfo( sourceItemID )
+					MS_Data[guid][MS.slotNames[slotID].."_sourceItemName"] = itemName
+					print(token, slotID or "nil", MS.slotNames[slotID], itemLink)
+				end)
 			end
-
-			-- local visualItemID = GetInventoryItemID("target", slotID)
-			-- -- local actualLink   = GetInventoryItemLink("target", slotID)
-			-- print(token, slotID or "nil", MS.slotNames[slotID], visualItemID or "nil")
-
-			-- if visualItemID then
-			-- 	-- local visualName, visualLink = GetItemInfo(visualItemID)
-			-- 	MS_Data[guid][MS.slotNames[slotID]] = visualItemID
-			-- 	local appearanceID, modifiedAppearanceID = C_TransmogCollection.GetItemInfo(visualItemID)
-			-- 	print(token, slotID or "nil", MS.slotNames[slotID], visualItemID or "nil",
-			-- 			appearanceID or "no appearanceID", modifiedAppearanceID or "no modifiedAppearanceID")
-			-- 	if appearanceID then
-			-- 		MS_Data[guid][MS.slotNames[slotID].."_appearanceID"] = appearanceID
-			-- 		MS_Data[guid][MS.slotNames[slotID].."_appearanceInfo"] = C_TransmogCollection.GetAppearanceSourceInfo(appearanceID)
-			-- 		-- print(MS_Data[guid][MS.slotNames[slotID].."_appearanceInfo"].transmoglink or "nil",
-			-- 				-- MS_Data[guid][MS.slotNames[slotID].."_appearanceInfo"].itemlink or "nil")
-
-
-			-- 	-- MS_Data[guid][MS.slotNames[slotID].."_modifiedAppearanceID"] = modifiedAppearanceID
-			-- 	-- MS_Data[guid][MS.slotNames[slotID].."_modifiedAppearanceInfo"] = C_TransmogCollection.GetAppearanceSourceInfo(modifiedAppearanceID)
-			-- 	-- print(MS_Data[guid][MS.slotNames[slotID].."_modifiedAppearanceInfo"].transmoglink)
-
-			-- 	-- MS_Data[guid][MS.slotNames[slotID].."_sourceItemID"] = C_TransmogCollection.GetSourceItemID(modifiedAppearanceID)
-			-- 	-- print(MS_Data[guid][MS.slotNames[slotID].."_sourceItemID"])
-
-			-- 		MS_Data[guid][MS.slotNames[slotID].."_appearanceSources"] = C_TransmogCollection.GetAllAppearanceSources(appearanceID, slotID)
-			-- 		for _, appearanceSourceID in ipairs(MS_Data[guid][MS.slotNames[slotID].."_appearanceSources"]) do
-			-- 			MS_Data[guid][MS.slotNames[slotID].."_appearanceSources"][appearanceSourceID] = C_TransmogCollection.GetAppearanceSourceInfo(appearanceSourceID)
-			-- 		end
-
-
-			-- 		-- MS_Data[guid][MS.slotNames[slotID].."_sourceInfo"] = C_TransmogCollection.GetSourceInfo(MS_Data[guid][MS.slotNames[slotID].."_sourceItemID"])
-			-- 	end
-
-				-- MS_Data[guid][MS.slotNames[slotID].."_AppliedItemTransmogInfo"] = C_Item.GetAppliedItemTransmogInfo(slotID)
-
-
-
-				-- --
-				-- MogScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
-				-- MogScanTooltip:ClearLines()
-				-- MogScanTooltip:SetInventoryItem("target", slotID)
-
-				-- MS_Data[guid][MS.slotNames[slotID].."_tooltip"] = MogScanTooltip
-
-
-				-- local tt = C_TooltipInfo.GetItemByItemModifiedAppearanceID
-
-				-- print(C_TooltipInfo.GetItemByItemModifiedAppearanceID(MogScanTooltip))
-
-
-			-- end
 		end
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
 	end
