@@ -7,6 +7,7 @@ MS_Data = {}
 MS_Archive = {}
 MS_Options = {}
 
+MS.linkPattern = "(|c.*|Hcustomset:.*|r)"
 MS.slotTokens = {
 	"HeadSlot", "ShoulderSlot", "ShirtSlot", "ChestSlot", "WaistSlot", "LegsSlot",
 	"FeetSlot", "WristSlot", "HandsSlot", "BackSlot", "MainHandSlot",
@@ -42,8 +43,8 @@ end
 function MS.OnLoad()
 	SLASH_MS1 = "/MS"
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
-	-- MogShareFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	MogShareFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+	MogShareFrame:UnregisterEvent( "CHAT_MSG_GUILD" )
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY")
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_ADDON")
@@ -65,34 +66,47 @@ function MS.INSPECT_READY(guid)
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
-		local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
-		mogData.archived = nil
-		local ts = time()
+		MS.SaveLink( mogLink )
 
-		mogData.lastScan = ts
-		mogData.playerList = mogData.playerList or {}
 		local name, realm = UnitName("target")
 		realm = realm or GetRealmName()
-		mogData.playerList[name.."-"..realm] = ts
+		print("Scanned "..name.."-"..realm..": "..mogLink)
 
-		mogData.classList = mogData.classList or {}
-		mogData.classList[UnitClass("target")] = ts
-
-		mogData.eloData = mogData.eloData or {
-			rating      = 1500,
-			comparisons = 0,
-			wins        = 0,
-			losses      = 0,
-			lastShown   = 0,
-		}
-
-		MS_Data[mogLink] = mogData
-		print(name, realm, mogLink)
 		-- MS.ScanItems()
 
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
 	end
 end
+function MS.CHAT_MSG_( self, msg, sender )
+	if not issecretvalue(msg) then
+		for mogLink in msg:gmatch(MS.linkPattern) do
+			MS.SaveLink( mogLink )
+			print("Sent by "..sender..": "..mogLink)
+		end
+	else
+		print("chat messages are secret right now.")
+	end
+end
+MS.CHAT_MSG_GUILD = MS.CHAT_MSG_
+
+function MS.SaveLink( mogLink )
+	local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
+	mogData.archived = nil
+	local ts = time()
+
+	mogData.lastScan = ts
+
+	mogData.eloData = mogData.eloData or {
+		rating      = 1500,
+		comparisons = 0,
+		wins        = 0,
+		losses      = 0,
+		lastShown   = 0,
+	}
+
+	MS_Data[mogLink] = mogData
+end
+
 function MS.ScanItems()
 	for _, token in ipairs(MS.slotTokens) do
 			local slotID = GetInventorySlotInfo(token)

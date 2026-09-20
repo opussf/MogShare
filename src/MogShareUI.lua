@@ -60,7 +60,7 @@ function MS.UIOnLoad( mogframe )
 	mogframe:Hide()
 end
 function MS.UIOpenFrame( mogframe )
-	print("MS.UIOpenFrame")
+	-- print("MS.UIOpenFrame")
 	mogframe:Show()
 end
 function MS.UIMoveFrame( mogframe )
@@ -83,7 +83,7 @@ function MS.UIUpdate()
 	MS.UI_ShowList()
 end
 function MS.UIOnShow()
-	print("MS.UIOnShow()")
+	-- print("MS.UIOnShow()")
 	MS.UI_BuildItemDisplay()
 	MS.UI_ShowList()
 end
