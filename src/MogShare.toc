@@ -20,4 +20,5 @@
 ## Category-zhTW: 戰隊收藏
 
 MogShare.lua
+MogShareUI.lua
 MogShare.xml

@@ -13,4 +13,6 @@
 			</OnEvent>
 		</Scripts>
 	</Frame>
+	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+	</Frame>
 </Ui>

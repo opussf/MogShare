@@ -60,20 +60,19 @@ function MS.PLAYER_TARGET_CHANGED()
 end
 function MS.INSPECT_READY(guid)
 	if guid == MS.pendingGUID then
-		MS_Data[guid] = MS_Data[guid] or {}
-		MS_Data[guid].name, MS_Data[guid].realm = UnitName("target")
-		MS_Data[guid].realm = MS_Data[guid].realm or GetRealmName()
-		local className, classFile, classID = UnitClass("target")
-		MS_Data[guid].className = className
-
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
-		MS_Data[guid].mogs = MS_Data[guid].mogs or {}
-		MS_Data[guid].mogs[mogLink] = time()
-		print(MS_Data[guid].name, MS_Data[guid].realm, mogLink)
-		-- print(GetItemTransmogInfoList(targetMogList))
+		MS_Data[mogLink] = MS_Data[mogLink] or {}
 
+		local mogOwner = {}
+		mogOwner.name, mogOwner.realm = UnitName("target")
+		mogOwner.realm = mogOwner.realm or GetRealmName()
+		mogOwner.className = UnitClass("target")
+		mogOwner.scanTime = time()
+		print(mogOwner.name, mogOwner.realm, mogLink)
+
+		table.insert(MS_Data[mogLink], mogOwner)
 		-- MS.ScanItems()
 
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
