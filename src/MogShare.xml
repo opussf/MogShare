@@ -14,5 +14,81 @@
 		</Scripts>
 	</Frame>
 	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+		<Size x="600" y="500" />
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_BG" file="Interface\DialogFrame\UI-DialogBox-Background">
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parent_Header" inherits="GameFontNormalLarge" text="MogShare">
+					<Anchors>
+						<Anchor point="TOP" relativePoint="TOP">
+							<Offset x="0" y="-10"/>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnLoad>self:SetText("MogShare "..MS.MSG_VERSION)</OnLoad>
+					</Scripts>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parent_Close" inherits="UIPanelCloseButton" parent="MogShareDisplayFrame">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="0" y="0"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>self:GetParent():Hide()</OnClick>
+				</Scripts>
+			</Button>
+			<Frame name="$parent_MogList" parentKey="MogList">
+				<Size x="500" y="328"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+						<Offset>
+							<AbsDimension x="50" y="-120"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color r="0" g="0" b="0" a="1"/>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Slider name="$parent_MogListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
+				<Size x="12" y="328"/>
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_MogList"/>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture setAllPoints="true">
+							<Color r="0" g="0" b="0" a="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>self:SetValue(0)</OnLoad>
+					<OnValueChanged>MS.UIUpdate()</OnValueChanged>
+				</Scripts>
+				<ThumbTexture name="$parentThumbTexture" file="Interface\Buttons\UI-ScrollBar-Knob">
+					<Size x="12" y="25"/>
+				</ThumbTexture>
+			</Slider>
+		</Frames>
+		<Scripts>
+			<OnLoad>MS.UIOnLoad(self)</OnLoad>
+		</Scripts>
 	</Frame>
 </Ui>

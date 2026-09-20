@@ -106,4 +106,5 @@ function MS.Command(msg)
 	for mogLink, data in pairs(MS_Data) do
 		print(string.format("%s - %i chars", mogLink, #data))
 	end
+	MogShareDisplayFrame:Show()
 end
