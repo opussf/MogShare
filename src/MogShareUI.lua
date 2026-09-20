@@ -18,6 +18,7 @@ function MS.Set_mixin:OnRowClick(button)
 			SetItemRef(linkType..":"..linkData, self.link, button)
 		end
 	end
+	MS.SelectRow(self)
     -- print("Row clicked:", self.Text:GetText())
     -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
@@ -29,23 +30,30 @@ function MS.Set_mixin:OnActionButtonClick(button)
 	MS_Data[self.link] = nil
 	MS.UI_ShowList()
 end
+function MS.SelectRow(row)
+	if MS.selectedRow and MS.selectedRow.SelectedTexture then
+		MS.selectedRow.SelectedTexture:Hide()
+	end
+	row.SelectedTexture:Show()
+	MS.selectedRow = row
+end
 --------
 
 function MS.UIOnLoad( mogframe )
 	DressUpFrame:HookScript("OnShow", function(self)
-		print("Dressing room opened")
+		-- print("Dressing room opened")
 		MS.UIOpenFrame( mogframe )
 	end)
 	DressUpFrame:HookScript("OnHide", function(self)
-		print("Dressing room closed")
+		-- print("Dressing room closed")
 		mogframe:Hide()
 	end)
 	DressUpFrame.CustomSetDetailsPanel:HookScript("OnShow", function(self)
-		print("CustomSetDetailsPanel opened.")
+		-- print("CustomSetDetailsPanel opened.")
 		MS.UIMoveFrame( mogframe )
 	end)
 	DressUpFrame.CustomSetDetailsPanel:HookScript("OnHide", function(self)
-		print("CustomSetDetailsPanel closed.")
+		-- print("CustomSetDetailsPanel closed.")
 		MS.UIMoveFrame( mogframe )
 	end)
 
@@ -111,7 +119,7 @@ function MS.UI_ShowList()
 	local count = 1
 	local sortedItems = {}
 	for k in pairs( MS_Data ) do table.insert(sortedItems, k) end
-	table.sort( sortedItems )
+	table.sort( sortedItems, MS.sortFunctions["lastScan"])
 	local offset = MogShareDisplayFrame_MogListVSlider:GetValue()
 
 	while count <= #MS.UISet_Buttons do
@@ -132,3 +140,9 @@ function MS.UI_ShowList()
 		count = count + 1
 	end
 end
+
+MS.sortFunctions = {
+	lastScan = function( a, b ) -- a and b are links
+		return MS_Data[a].lastScan > MS_Data[b].lastScan
+	end,
+}

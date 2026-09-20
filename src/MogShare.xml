@@ -5,6 +5,15 @@
 	<Button  name="MSSet_template" enableMouse="true" virtual="true" mixin="MS.Set_mixin">
 		<Size x="500" y="20"/>
 		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="SelectedTexture" hidden="true">
+					<Color r="1" g="0.82" b="0" a="0.3"/>
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
 			<Layer level="OVERLAY">
 				<FontString name="$parent_SetText" parentKey="Text" inherits="GameFontNormalSmall" justifyH="LEFT">
 					<Size x="250" y="20"/>
