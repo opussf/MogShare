@@ -11,11 +11,22 @@ function MS.Set_mixin:OnRowClick(button)
 		else
 			-- plainclick
 			local linkType, linkData = self.link:match("|H(%a+):(.-)|h")
+			if DressUpFrameResetButton then
+				DressUpFrameResetButton:Click()
+			end
 			SetItemRef(linkType..":"..linkData, self.link, button)
 		end
 	end
     print("Row clicked:", self.Text:GetText())
     -- self is the row button itself, so self.Text / self.ActionButton work here too
+end
+function MS.Set_mixin:OnActionButtonClick(button)
+	print("Button clicked: "..self.link)
+	MS_Archive[self.link] = MS_Data[self.link]
+	MS_Archive[self.link].archived = time()
+
+	MS_Data[self.link] = nil
+	MS.UI_ShowList()
 end
 --------
 
@@ -41,9 +52,6 @@ function MS.UIOnLoad( mogframe )
 end
 function MS.UIOpenFrame( mogframe )
 	print("MS.UIOpenFrame")
-	MS.UI_BuildItemDisplay()
-	MS.UI_ShowList()
-
 	mogframe:Show()
 end
 function MS.UIMoveFrame( mogframe )
@@ -63,6 +71,12 @@ function MS.UIMouseWheel( delta )
 end
 
 function MS.UIUpdate()
+	MS.UI_ShowList()
+end
+function MS.UIOnShow()
+	print("MS.UIOnShow()")
+	MS.UI_BuildItemDisplay()
+	MS.UI_ShowList()
 end
 
 
@@ -90,8 +104,10 @@ function MS.UI_BuildItemDisplay()
 		end
 	end
 end
+
 function MS.UI_ShowList()
 	print("UI_ShowList()")
+	MS.UI_BuildItemDisplay()
 	local count = 1
 	local sortedItems = {}
 	for k in pairs( MS_Data ) do table.insert(sortedItems, k) end

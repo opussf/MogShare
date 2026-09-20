@@ -21,7 +21,7 @@
 					<Anchor point="RIGHT" x="-4" y="0"/>
 				</Anchors>
 				<Scripts>
-					<!-- <OnClick>MS.UIActionButton_Click()</OnClick> -->
+					<OnClick>self:GetParent():OnActionButtonClick(button)</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -40,7 +40,7 @@
 			</OnEvent>
 		</Scripts>
 	</Frame>
-	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false">
+	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false" hidden="true">
 		<Size x="600" y="500" />
 		<Anchors>
 			<Anchor point="CENTER"/>
@@ -119,6 +119,7 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>MS.UIOnLoad(self)</OnLoad>
+			<OnShow>MS.UIOnShow(self)</OnShow>
 		</Scripts>
 	</Frame>
 </Ui>

@@ -4,6 +4,7 @@ MS.MSG_VERSION   = C_AddOns.GetAddOnMetadata( MS_SLUG, "Version" )
 MS.MSG_AUTHOR    = C_AddOns.GetAddOnMetadata( MS_SLUG, "Author" )
 
 MS_Data = {}
+MS_Archive = {}
 
 MS.slotTokens = {
 	"HeadSlot", "ShoulderSlot", "ShirtSlot", "ChestSlot", "WaistSlot", "LegsSlot",
@@ -63,16 +64,28 @@ function MS.INSPECT_READY(guid)
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
-		MS_Data[mogLink] = MS_Data[mogLink] or {}
+		local mogData = MS_Data[mogLink] or {}
+		local ts = time()
 
-		local mogOwner = {}
-		mogOwner.name, mogOwner.realm = UnitName("target")
-		mogOwner.realm = mogOwner.realm or GetRealmName()
-		mogOwner.className = UnitClass("target")
-		mogOwner.scanTime = time()
-		print(mogOwner.name, mogOwner.realm, mogLink)
+		mogData.lastScan = ts
+		mogData.playerList = mogData.playerList or {}
+		local name, realm = UnitName("target")
+		realm = realm or GetRealmName()
+		mogData.playerList[name.."-"..realm] = ts
 
-		MS_Data[mogLink][guid] = mogOwner
+		mogData.classList = mogData.classList or {}
+		mogData.classList[UnitClass("target")] = ts
+
+		mogData.eloData = mogData.eloData or {
+			rating      = 1500,
+			comparisons = 0,
+			wins        = 0,
+			losses      = 0,
+			lastShown   = 0,
+		}
+
+		MS_Data[mogLink] = mogData
+		print(name, realm, mogLink)
 		-- MS.ScanItems()
 
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
