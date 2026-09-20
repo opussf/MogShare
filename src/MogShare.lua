@@ -72,7 +72,7 @@ function MS.INSPECT_READY(guid)
 		mogOwner.scanTime = time()
 		print(mogOwner.name, mogOwner.realm, mogLink)
 
-		table.insert(MS_Data[mogLink], mogOwner)
+		MS_Data[mogLink][guid] = mogOwner
 		-- MS.ScanItems()
 
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
