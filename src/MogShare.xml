@@ -7,7 +7,7 @@
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString name="$parent_SetText" parentKey="Text" inherits="GameFontNormalSmall" justifyH="LEFT">
-					<Size x="200" y="20"/>
+					<Size x="250" y="20"/>
 					<Anchors>
 						<Anchor point="LEFT" x="4" y="0"/>
 					</Anchors>

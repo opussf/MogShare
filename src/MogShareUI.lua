@@ -11,13 +11,17 @@ function MS.Set_mixin:OnRowClick(button)
 		else
 			-- plainclick
 			local linkType, linkData = self.link:match("|H(%a+):(.-)|h")
-			if DressUpFrameResetButton then
-				DressUpFrameResetButton:Click()
+			local actor = DressUpFrame.ModelScene:GetPlayerActor()
+			if actor then
+				actor:Undress()
 			end
+			-- if DressUpFrameResetButton then
+				-- DressUpFrameResetButton:Click()
+			-- end
 			SetItemRef(linkType..":"..linkData, self.link, button)
 		end
 	end
-    print("Row clicked:", self.Text:GetText())
+    -- print("Row clicked:", self.Text:GetText())
     -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
 function MS.Set_mixin:OnActionButtonClick(button)
@@ -64,7 +68,7 @@ function MS.UIMoveFrame( mogframe )
 	end
 end
 function MS.UIMouseWheel( delta )
-	print("MS.UIMouseWheel( "..delta.." )")
+	-- print("MS.UIMouseWheel( "..delta.." )")
 	MogShareDisplayFrame_MogListVSlider:SetValue(
 		MogShareDisplayFrame_MogListVSlider:GetValue() - delta
 	)
@@ -79,21 +83,20 @@ function MS.UIOnShow()
 	MS.UI_ShowList()
 end
 
-
 ----
 
 function MS.UI_BuildItemDisplay()
 	if not MS.UISet_Buttons then
 		local _, height = MogShareDisplayFrame_MogList:GetSize()
 		local rowCount = math.floor( height / 20 )
-		print(height.." high", "rows: "..rowCount)
+		-- print(height.." high", "rows: "..rowCount)
 
 		MS.UISet_Buttons = {}
 		for rowNum = 1, rowCount do
 			local buttonFrame = CreateFrame("Button", "MS_MogList_Button"..rowNum, MogShareDisplayFrame_MogList, "MSSet_template")
 			buttonFrame.Text:SetText("This is row #:"..rowNum)
 			buttonFrame.Text:Show()
-			buttonFrame.ActionButton:SetText("PUSH ME")
+			buttonFrame.ActionButton:SetText("Archive")
 			if rowNum == 1 then
 				buttonFrame:SetPoint( "TOP", MogShareDisplayFrame_MogList, "TOP" )
 			else
@@ -106,7 +109,7 @@ function MS.UI_BuildItemDisplay()
 end
 
 function MS.UI_ShowList()
-	print("UI_ShowList()")
+	-- print("UI_ShowList()")
 	MS.UI_BuildItemDisplay()
 	local count = 1
 	local sortedItems = {}
@@ -118,8 +121,11 @@ function MS.UI_ShowList()
 		local buttonFrame = MS.UISet_Buttons[count]
 
 		if count + offset <= #sortedItems then
-			buttonFrame.link = sortedItems[count+offset]
-			buttonFrame.Text:SetText(sortedItems[count+offset])
+			local link = sortedItems[count+offset]
+			local lastScan = MS_Data[link].lastScan
+
+			buttonFrame.link = link
+			buttonFrame.Text:SetText(link.." "..date("%c", lastScan))
 			buttonFrame.Text:Show()
 			buttonFrame:Show()
 		else

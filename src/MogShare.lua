@@ -5,6 +5,7 @@ MS.MSG_AUTHOR    = C_AddOns.GetAddOnMetadata( MS_SLUG, "Author" )
 
 MS_Data = {}
 MS_Archive = {}
+MS_Options = {}
 
 MS.slotTokens = {
 	"HeadSlot", "ShoulderSlot", "ShirtSlot", "ChestSlot", "WaistSlot", "LegsSlot",
@@ -64,7 +65,8 @@ function MS.INSPECT_READY(guid)
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
-		local mogData = MS_Data[mogLink] or {}
+		local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
+		mogData.archived = nil
 		local ts = time()
 
 		mogData.lastScan = ts
@@ -116,8 +118,5 @@ function MS.ScanItems()
 		end
 end
 function MS.Command(msg)
-	for mogLink, data in pairs(MS_Data) do
-		print(string.format("%s - %i chars", mogLink, #data))
-	end
 	MogShareDisplayFrame:Show()
 end
