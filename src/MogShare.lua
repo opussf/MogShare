@@ -51,7 +51,7 @@ function MS.PLAYER_TARGET_CHANGED()
 	-- I still prefer positive checks
 	if UnitExists("target") and UnitIsPlayer("target") then
 		if CanInspect("target") and CheckInteractDistance("target",1) then
-			print("New target:", UnitName("target"))
+			-- print("New target:", UnitName("target"))
 			NotifyInspect("target")
 			MogShareFrame:RegisterEvent("INSPECT_READY")
 			MS.pendingGUID = UnitGUID("target")
@@ -63,14 +63,24 @@ function MS.INSPECT_READY(guid)
 		MS_Data[guid] = MS_Data[guid] or {}
 		MS_Data[guid].name, MS_Data[guid].realm = UnitName("target")
 		MS_Data[guid].realm = MS_Data[guid].realm or GetRealmName()
+		local className, classFile, classID = UnitClass("target")
+		MS_Data[guid].className = className
 
 		local targetMogList = C_TransmogCollection.GetInspectItemTransmogInfoList()
-		MS_Data[guid].mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
-		print(MS_Data[guid].name, MS_Data[guid].realm, MS_Data[guid].mogLink)
-		print(GetItemTransmogInfoList(targetMogList))
+		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
+		MS_Data[guid].mogs = MS_Data[guid].mogs or {}
+		MS_Data[guid].mogs[mogLink] = time()
+		print(MS_Data[guid].name, MS_Data[guid].realm, mogLink)
+		-- print(GetItemTransmogInfoList(targetMogList))
 
-		for _, token in ipairs(MS.slotTokens) do
+		-- MS.ScanItems()
+
+		MogShareFrame:UnregisterEvent("INSPECT_READY")
+	end
+end
+function MS.ScanItems()
+	for _, token in ipairs(MS.slotTokens) do
 			local slotID = GetInventorySlotInfo(token)
 
 			local slotAppearanceID = targetMogList[slotID].appearanceID
@@ -92,11 +102,11 @@ function MS.INSPECT_READY(guid)
 				end)
 			end
 		end
-		MogShareFrame:UnregisterEvent("INSPECT_READY")
-	end
 end
 function MS.Command(msg)
 	for guid, data in pairs(MS_Data) do
-		print(string.format("%s - %s:%s", MS_Data[guid].mogLink, MS_Data[guid].name, MS_Data[guid].realm))
+		for mogLink, ts in pairs(data.mogs) do
+			print(string.format("%s - %s:%s", mogLink, MS_Data[guid].name, MS_Data[guid].realm))
+		end
 	end
 end
