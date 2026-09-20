@@ -103,9 +103,7 @@ function MS.ScanItems()
 		end
 end
 function MS.Command(msg)
-	for guid, data in pairs(MS_Data) do
-		for mogLink, ts in pairs(data.mogs) do
-			print(string.format("%s - %s:%s", mogLink, MS_Data[guid].name, MS_Data[guid].realm))
-		end
+	for mogLink, data in pairs(MS_Data) do
+		print(string.format("%s - %i chars", mogLink, #data))
 	end
 end
