@@ -92,6 +92,9 @@
 						</Texture>
 					</Layer>
 				</Layers>
+				<Scripts>
+					<OnMouseWheel>MS.UIMouseWheel( delta )</OnMouseWheel>
+				</Scripts>
 			</Frame>
 			<Slider name="$parent_MogListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
 				<Size x="12" y="328"/>

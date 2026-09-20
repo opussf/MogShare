@@ -54,7 +54,12 @@ function MS.UIMoveFrame( mogframe )
 	else
 		mogframe:SetPoint("LEFT", DressUpFrame, "RIGHT")
 	end
-
+end
+function MS.UIMouseWheel( delta )
+	print("MS.UIMouseWheel( "..delta.." )")
+	MogShareDisplayFrame_MogListVSlider:SetValue(
+		MogShareDisplayFrame_MogListVSlider:GetValue() - delta
+	)
 end
 
 function MS.UIUpdate()
