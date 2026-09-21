@@ -23,7 +23,7 @@ function MS.Set_mixin:OnRowClick(button)
     -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
 function MS.Set_mixin:OnActionButtonClick(button)
-	print("Button clicked: "..self.link)
+	print("Archiving: "..self.link)
 	MS_Archive[self.link] = MS_Data[self.link]
 	MS_Archive[self.link].archived = time()
 
@@ -31,7 +31,6 @@ function MS.Set_mixin:OnActionButtonClick(button)
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
-	print(row, row.link)
 	MS.selectedLink = row.link
 	MS.UI_ShowList()  -- force update
 end
@@ -81,7 +80,6 @@ function MS.UIUpdate()
 	MS.UI_ShowList()
 end
 function MS.UIOnShow()
-	print("MS.UIOnShow()")
 	MS.UI_BuildDropDowns()
 	MS.UI_BuildItemDisplay()
 	MS.UI_ShowList()
@@ -122,7 +120,6 @@ function MS.UI_BuildItemDisplay()
 	if not MS.UISet_Buttons then
 		local _, height = MogShareDisplayFrame_MogList:GetSize()
 		local rowCount = math.floor( height / 20 )
-		print(height.." high", "rows: "..rowCount)
 
 		MS.UISet_Buttons = {}
 		for rowNum = 1, rowCount do
@@ -142,13 +139,13 @@ function MS.UI_BuildItemDisplay()
 end
 
 function MS.UI_ShowList()
-	print("UI_ShowList()")
 	MS.UI_BuildItemDisplay()
 	local count = 1
 	local sortedItems = {}
 	for k in pairs( MS_Data ) do table.insert(sortedItems, k) end
-	table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy])
-	local offset = MogShareDisplayFrame_MogListVSlider:GetValue()
+	table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy].sortFun)
+	local offset = floor(MogShareDisplayFrame_MogListVSlider:GetValue())
+	MogShareDisplayFrame_MogListVSlider:SetMinMaxValues(0, max(0, #sortedItems - #MS.UISet_Buttons))
 
 	while count <= #MS.UISet_Buttons do
 		local buttonFrame = MS.UISet_Buttons[count]
@@ -158,7 +155,7 @@ function MS.UI_ShowList()
 			local lastScan = MS_Data[link].lastScan
 
 			buttonFrame.link = link
-			buttonFrame.Text:SetText(link.." "..date("%c", lastScan))
+			buttonFrame.Text:SetText(link.." "..MS.sortFunctions[MS_Options.sortBy].display(link))
 			buttonFrame.Text:Show()
 
 			if link == MS.selectedLink then
@@ -176,10 +173,23 @@ function MS.UI_ShowList()
 end
 
 MS.sortFunctions = {
-	lastScan = function( a, b ) -- a and b are links
-		return MS_Data[a].lastScan > MS_Data[b].lastScan
-	end,
-	rank = function( a, b )
-		return MS_Data[a].eloData.rating > MS_Data[b].eloData.rating
-	end,
+	lastScan = {
+		sortFun = function( a, b ) -- a and b are links
+			return MS_Data[a].lastScan > MS_Data[b].lastScan
+		end,
+		display = function( l ) -- l is the link
+			return date("%s", MS_Data[l].lastScan)
+		end,
+	},
+	rank = {
+		sortFun = function( a, b )
+			if MS_Data[a].eloData.rating ~= MS_Data[b].eloData.rating then
+				return MS_Data[a].eloData.rating > MS_Data[b].eloData.rating
+			end
+			return MS_Data[a].lastScan > MS_Data[b].lastScan
+		end,
+		display = function( l )
+			return MS_Data[l].eloData.rating
+		end,
+	},
 }
