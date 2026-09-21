@@ -23,16 +23,30 @@ function MS.Set_mixin:OnRowClick(button)
     -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
 function MS.Set_mixin:OnActionButtonClick(button)
-	print("Archiving: "..self.link)
-	MS_Archive[self.link] = MS_Data[self.link]
-	MS_Archive[self.link].archived = time()
+	print(MS.gameOn, MS.gameItems[1], MS.gameItems[2])
+	if MS.gameOn then
+		print(self.link, self.link == MS.gameItems[1])
+		MS.UpdateElo(
+				(self.link == MS.gameItems[1] and MS.gameItems[1] or MS.gameItems[2]),   -- winner
+				(self.link == MS.gameItems[2] and MS.gameItems[1] or MS.gameItems[2])    -- loser
+		)
+		MS.gameItems = nil
+	else
+		print("Archiving: "..self.link)
+		MS_Archive[self.link] = MS_Data[self.link]
+		MS_Archive[self.link].archived = time()
 
-	MS_Data[self.link] = nil
+		MS_Data[self.link] = nil
+	end
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
 	MS.selectedLink = row.link
 	MS.UI_ShowList()  -- force update
+end
+function MS.GameButtonOnClick()
+	MS.gameOn = not MS.gameOn
+	MS.UI_ShowList()
 end
 --------
 
@@ -84,6 +98,10 @@ function MS.UIOnShow()
 	MS.UI_BuildItemDisplay()
 	MS.UI_ShowList()
 end
+function MS.UIOnHide()
+	MS.gameOn = nil
+	MS.gameItems = nil
+end
 
 ----
 function MS.UI_BuildDropDowns()
@@ -113,6 +131,7 @@ function MS.SetSortFunction( info )
 	-- print( "SetSortFunction( "..info.value.." )" )
 	MS_Options.sortBy = info.value
 	UIDropDownMenu_SetText( MogShareDisplayFrame_SortDropDownMenu, info.value )
+	MS.UI_ShowList()
 end
 
 ----------
@@ -142,8 +161,13 @@ function MS.UI_ShowList()
 	MS.UI_BuildItemDisplay()
 	local count = 1
 	local sortedItems = {}
-	for k in pairs( MS_Data ) do table.insert(sortedItems, k) end
-	table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy].sortFun)
+	if MS.gameOn then
+		MS.gameItems = MS.gameItems or MS.PickNextPair()
+		sortedItems = MS.gameItems
+	else
+		for k in pairs( MS_Data ) do table.insert(sortedItems, k) end
+		table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy].sortFun)
+	end
 	local offset = floor(MogShareDisplayFrame_MogListVSlider:GetValue())
 	MogShareDisplayFrame_MogListVSlider:SetMinMaxValues(0, max(0, #sortedItems - #MS.UISet_Buttons))
 
@@ -157,6 +181,12 @@ function MS.UI_ShowList()
 			buttonFrame.link = link
 			buttonFrame.Text:SetText(link.." "..MS.sortFunctions[MS_Options.sortBy].display(link))
 			buttonFrame.Text:Show()
+
+			if MS.gameOn then
+				buttonFrame.ActionButton:SetText("Winner")
+			else
+				buttonFrame.ActionButton:SetText("Archive")
+			end
 
 			if link == MS.selectedLink then
 				buttonFrame.SelectedTexture:Show()
@@ -172,13 +202,59 @@ function MS.UI_ShowList()
 	end
 end
 
+function MS.PickNextPair()
+    local items = {}
+    for item in pairs(MS_Data) do table.insert(items, item) end
+
+    -- bias toward under-compared items
+    table.sort(items, function(a, b)
+        return MS_Data[a].eloData.comparisons < MS_Data[b].eloData.comparisons
+    end)
+
+    local poolSize = math.min(10, #items)  -- take the 10 least-compared as the pool
+    local first = items[math.random(poolSize)]
+
+    -- from the rest, pick whichever is closest in rating to `first`
+    local bestMatch, bestDiff = nil, math.huge
+    for _, item in ipairs(items) do
+        if item ~= first then
+            local diff = math.abs(MS_Data[item].eloData.rating - MS_Data[first].eloData.rating)
+            if diff < bestDiff then
+                bestMatch, bestDiff = item, diff
+            end
+        end
+    end
+
+    return {first, bestMatch}
+end
+
+function MS.UpdateElo(winnerItem, loserItem)
+	local K = 32
+    local winner = MS_Data[winnerItem]
+    local loser  = MS_Data[loserItem]
+
+    -- expected score: probability winner "should" have won, based on current ratings
+    local expectedWinner = 1 / (1 + 10 ^ ((loser.eloData.rating - winner.eloData.rating) / 400))
+    local expectedLoser  = 1 - expectedWinner
+
+    winner.eloData.rating = winner.eloData.rating + K * (1 - expectedWinner)
+    loser.eloData.rating  = loser.eloData.rating  + K * (0 - expectedLoser)
+
+    winner.eloData.comparisons = winner.eloData.comparisons + 1
+    loser.eloData.comparisons  = loser.eloData.comparisons + 1
+    winner.eloData.wins   = winner.eloData.wins + 1
+    loser.eloData.losses  = loser.eloData.losses + 1
+    winner.eloData.lastShown = GetTime()
+    loser.eloData.lastShown  = GetTime()
+end
+
 MS.sortFunctions = {
 	lastScan = {
 		sortFun = function( a, b ) -- a and b are links
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l ) -- l is the link
-			return date("%s", MS_Data[l].lastScan)
+			return date("%c", MS_Data[l].lastScan)
 		end,
 	},
 	rank = {

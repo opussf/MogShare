@@ -105,8 +105,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>self:SetText("Compare")</OnLoad>
-					<!-- <OnClick>HS.TagButtonOnClick( self, "del" )</OnClick> -->
+					<OnLoad>self:SetText("Mog War")</OnLoad>
+					<OnClick>MS.GameButtonOnClick()</OnClick>
 				</Scripts>
 			</Button>
 			<Frame name="$parent_MogList" parentKey="MogList">
@@ -153,6 +153,7 @@
 		<Scripts>
 			<OnLoad>MS.UIOnLoad(self)</OnLoad>
 			<OnShow>MS.UIOnShow(self)</OnShow>
+			<OnHide>MS.UIOnHide(self)</OnHide>
 		</Scripts>
 	</Frame>
 </Ui>
