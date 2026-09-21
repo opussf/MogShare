@@ -247,8 +247,8 @@ function MS.UpdateElo(winnerItem, loserItem)
     loser.eloData.comparisons  = loser.eloData.comparisons + 1
     winner.eloData.wins   = winner.eloData.wins + 1
     loser.eloData.losses  = loser.eloData.losses + 1
-    winner.eloData.lastShown = GetTime()
-    loser.eloData.lastShown  = GetTime()
+    winner.eloData.lastShown = time()
+    loser.eloData.lastShown  = time()
 end
 
 MS.sortFunctions = {
