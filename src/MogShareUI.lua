@@ -44,6 +44,11 @@ function MS.SelectRow(row)
 end
 function MS.GameButtonOnClick()
 	MS.gameOn = not MS.gameOn
+	if MS.gameOn then
+		MogShareDisplayFrame_MogListVSlider:SetValue(0)  -- short list (make sure scroll is at the top)
+	else
+		MS.gameItems = nil  -- clear the gameItems when the game ends
+	end
 	MS.UI_ShowList()
 end
 --------
