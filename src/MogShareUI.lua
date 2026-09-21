@@ -205,6 +205,9 @@ function MS.UI_ShowList()
 	end
 end
 
+------
+-- elo functions
+------
 function MS.PickNextPair()
     local items = {}
     for item in pairs(MS_Data) do table.insert(items, item) end
@@ -250,6 +253,16 @@ function MS.UpdateElo(winnerItem, loserItem)
     winner.eloData.lastShown = time()
     loser.eloData.lastShown  = time()
 end
+function MS.GetELOProvisionalThreshold()
+	local count = 0
+	for _ in pairs(MS_Data) do count = count + 1 end
+	if count <= 1 then return 1 end
+
+	local threshold = math.ceil(2 * math.log(count, 2))
+
+	return math.max(3, math.min(threshold, 15))  -- between 3, and 15
+end
+------
 
 MS.sortFunctions = {
 	lastScan = {
@@ -268,7 +281,8 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l )
-			return MS_Data[l].eloData.rating
+			return MS_Data[l].eloData.rating..
+					" ("..MS_Data[l].eloData.wins.."W - "..MS_Data[l].eloData.losses.."L - "..MS_Data[l].eloData.comparisons.."C)"
 		end,
 	},
 }
