@@ -1758,6 +1758,7 @@ end
 function UnitXPMax( who )
 	return 1000
 end
+-- function
 ---------  C_WowTokenPublic
 C_WowTokenPublic = {}
 function C_WowTokenPublic.GetCommerceSystemStatus()

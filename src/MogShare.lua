@@ -42,7 +42,7 @@ end
 function MS.OnLoad()
 	SLASH_MS1 = "/MS"
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
-	MogShareFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+	MogShareFrame:RegisterEvent( "PLAYER_TARGET_CHANGED" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
