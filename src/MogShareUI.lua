@@ -31,11 +31,9 @@ function MS.Set_mixin:OnActionButtonClick(button)
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
-	if MS.selectedRow and MS.selectedRow.SelectedTexture then
-		MS.selectedRow.SelectedTexture:Hide()
-	end
-	row.SelectedTexture:Show()
-	MS.selectedRow = row
+	print(row, row.link)
+	MS.selectedLink = row.link
+	MS.UI_ShowList()  -- force update
 end
 --------
 
@@ -91,7 +89,6 @@ end
 
 ----
 function MS.UI_BuildDropDowns()
-	print("MS.UI_BuildDropDowns()")
 	MS.SortDropDownBuild( MogShareDisplayFrame_SortDropDownMenu )
 end
 function MS.SortDropDownBuild( self )
@@ -99,11 +96,9 @@ function MS.SortDropDownBuild( self )
 	UIDropDownMenu_JustifyText( self, "LEFT" )
 end
 function MS.SortDropDownPopulate( self, level, menuList )
-	print(self, level, menuList)
 	local sortList = {}
 	for sf in pairs( MS.sortFunctions ) do
 		table.insert( sortList, sf )
-		print(sf)
 	end
 	table.sort( sortList )
 	for _, sf in ipairs( sortList ) do
@@ -117,8 +112,9 @@ function MS.SortDropDownPopulate( self, level, menuList )
 end
 function MS.SetSortFunction( info )
 	-- takes the info table
-	print( "SetSortFunction( "..info.value.." )" )
+	-- print( "SetSortFunction( "..info.value.." )" )
 	MS_Options.sortBy = info.value
+	UIDropDownMenu_SetText( MogShareDisplayFrame_SortDropDownMenu, info.value )
 end
 
 ----------
@@ -146,7 +142,7 @@ function MS.UI_BuildItemDisplay()
 end
 
 function MS.UI_ShowList()
-	-- print("UI_ShowList()")
+	print("UI_ShowList()")
 	MS.UI_BuildItemDisplay()
 	local count = 1
 	local sortedItems = {}
@@ -164,6 +160,12 @@ function MS.UI_ShowList()
 			buttonFrame.link = link
 			buttonFrame.Text:SetText(link.." "..date("%c", lastScan))
 			buttonFrame.Text:Show()
+
+			if link == MS.selectedLink then
+				buttonFrame.SelectedTexture:Show()
+			else
+				buttonFrame.SelectedTexture:Hide()
+			end
 			buttonFrame:Show()
 		else
 			buttonFrame.Text:SetText("")
@@ -181,40 +183,3 @@ MS.sortFunctions = {
 		return MS_Data[a].eloData.rating > MS_Data[b].eloData.rating
 	end,
 }
-
-
-
-
---[[
-
-function HS.TagDropDownPopulate( self, level, menuList )
-	local tagList = {}
-
-	for hash in pairs( HS_settings.tags ) do
-		table.insert( tagList, hash )
-	end
-	table.sort( tagList )
-	for _, tag in ipairs( tagList ) do
-		info = UIDropDownMenu_CreateInfo()
-		info.text = tag
-		info.notCheckable = true
-		-- info.arg1 = tag
-		info.func = HS.SetTagForEdit
-		UIDropDownMenu_AddButton( info, level )
-	end
-	UIDropDownMenu_SetText( self, tagList[1] )
-	HS.editTag = tagList[1]
-end
-function HS.SetTagForEdit( info )
-	-- takes the info table
-	-- print( "SetTagForEdit( "..info.value.." )" )
-	-- UIDropDownMenu_SetText( )
-	HS.editTag = info.value
-	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
-	HSConfig_TagEditBox:SetText( info.value )
-	HS.UpdateUI()
-end
-
-
-
-]]

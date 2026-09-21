@@ -7,13 +7,12 @@ MS_Data = {}
 MS_Archive = {}
 MS_Options = { sortBy = "lastScan" }
 
-MS.linkPattern = "(|c.*|Hcustomset:.*|r)"
+MS.linkPattern = "(|c.-|Hcustomset:.-|r)"
 MS.slotTokens = {
 	"HeadSlot", "ShoulderSlot", "ShirtSlot", "ChestSlot", "WaistSlot", "LegsSlot",
 	"FeetSlot", "WristSlot", "HandsSlot", "BackSlot", "MainHandSlot",
 	"SecondaryHandSlot", "TabardSlot"
 }
-MS.slotNames = {}
 MS.slotNames = {
 	[1]  = "Head",
 	[2]  = "Neck",

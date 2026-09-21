@@ -94,11 +94,21 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<!-- <OnShow>HS.TagDropDownOnShow(self)</OnShow> -->
-					<!-- <OnLoad>Rested.UIDropDownOnLoad(self)</OnLoad> -->
-				</Scripts>
 			</Frame>
+			<Button name="$parent_GameButton" parentKey="GameButton" inherits="UIPanelButtonTemplate">
+				<Size x="76" y="30" />
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parent_SortDropDownMenu">
+						<Offset>
+							<AbsDimension x="170" y="2" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>self:SetText("Compare")</OnLoad>
+					<!-- <OnClick>HS.TagButtonOnClick( self, "del" )</OnClick> -->
+				</Scripts>
+			</Button>
 			<Frame name="$parent_MogList" parentKey="MogList">
 				<Size x="320" y="420"/>
 				<Anchors>
