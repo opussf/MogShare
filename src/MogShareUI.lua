@@ -92,8 +92,36 @@ end
 ----
 function MS.UI_BuildDropDowns()
 	print("MS.UI_BuildDropDowns()")
-
+	MS.SortDropDownBuild( MogShareDisplayFrame_SortDropDownMenu )
 end
+function MS.SortDropDownBuild( self )
+	UIDropDownMenu_Initialize( self, MS.SortDropDownPopulate )
+	UIDropDownMenu_JustifyText( self, "LEFT" )
+end
+function MS.SortDropDownPopulate( self, level, menuList )
+	print(self, level, menuList)
+	local sortList = {}
+	for sf in pairs( MS.sortFunctions ) do
+		table.insert( sortList, sf )
+		print(sf)
+	end
+	table.sort( sortList )
+	for _, sf in ipairs( sortList ) do
+		info = UIDropDownMenu_CreateInfo()
+		info.text = sf
+		info.notCheckable = true
+		info.func = MS.SetSortFunction
+		UIDropDownMenu_AddButton( info, level )
+	end
+	UIDropDownMenu_SetText( self, MS_Options.sortBy )
+end
+function MS.SetSortFunction( info )
+	-- takes the info table
+	print( "SetSortFunction( "..info.value.." )" )
+	MS_Options.sortBy = info.value
+end
+
+----------
 function MS.UI_BuildItemDisplay()
 	if not MS.UISet_Buttons then
 		local _, height = MogShareDisplayFrame_MogList:GetSize()
@@ -123,7 +151,7 @@ function MS.UI_ShowList()
 	local count = 1
 	local sortedItems = {}
 	for k in pairs( MS_Data ) do table.insert(sortedItems, k) end
-	table.sort( sortedItems, MS.sortFunctions["lastScan"])
+	table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy])
 	local offset = MogShareDisplayFrame_MogListVSlider:GetValue()
 
 	while count <= #MS.UISet_Buttons do
@@ -149,6 +177,9 @@ MS.sortFunctions = {
 	lastScan = function( a, b ) -- a and b are links
 		return MS_Data[a].lastScan > MS_Data[b].lastScan
 	end,
+	rank = function( a, b )
+		return MS_Data[a].eloData.rating > MS_Data[b].eloData.rating
+	end,
 }
 
 
@@ -156,17 +187,6 @@ MS.sortFunctions = {
 
 --[[
 
-
-
-function HS.UIInit()
-	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
-	HS.ModifierDropDownBuild( HSConfig_ModifierDropDownMenu )
-	HS.BuildBars()
-end
-function HS.TagDropDownBuild( self )
-	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
-	UIDropDownMenu_JustifyText( self, "LEFT" )
-end
 function HS.TagDropDownPopulate( self, level, menuList )
 	local tagList = {}
 

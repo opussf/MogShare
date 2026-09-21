@@ -5,7 +5,7 @@ MS.MSG_AUTHOR    = C_AddOns.GetAddOnMetadata( MS_SLUG, "Author" )
 
 MS_Data = {}
 MS_Archive = {}
-MS_Options = {}
+MS_Options = { sortBy = "lastScan" }
 
 MS.linkPattern = "(|c.*|Hcustomset:.*|r)"
 MS.slotTokens = {
@@ -81,7 +81,6 @@ function MS.INSPECT_READY(guid)
 end
 function MS.CHAT_MSG_( msg, sender )
 	if not issecretvalue(msg) then
-		print( sender, msg )
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
 			print("Sent by "..sender..": "..mogLink)
