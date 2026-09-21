@@ -19,6 +19,13 @@
 ## Category-zhCN: 战团藏品
 ## Category-zhTW: 戰隊收藏
 
+localization/core.lua
+localization/de.lua
+localization/es.lua
+localization/fr.lua
+localization/pt.lua
+localization/ru.lua
+
 MogShare.lua
 MogShareUI.lua
 MogShare.xml
