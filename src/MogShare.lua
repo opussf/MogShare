@@ -44,7 +44,9 @@ function MS.OnLoad()
 	SLASH_MS1 = "/MS"
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
 	MogShareFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
-	MogShareFrame:UnregisterEvent( "CHAT_MSG_GUILD" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_WHISPER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_SAY" )
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY")
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
 	-- MogShareFrame:RegisterEvent("CHAT_MSG_ADDON")
@@ -77,17 +79,21 @@ function MS.INSPECT_READY(guid)
 		MogShareFrame:UnregisterEvent("INSPECT_READY")
 	end
 end
-function MS.CHAT_MSG_( self, msg, sender )
+function MS.CHAT_MSG_( msg, sender )
 	if not issecretvalue(msg) then
+		print( sender, msg )
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
 			print("Sent by "..sender..": "..mogLink)
 		end
 	else
 		print("chat messages are secret right now.")
+		-- can I save in a queue to scan later?
 	end
 end
-MS.CHAT_MSG_GUILD = MS.CHAT_MSG_
+MS.CHAT_MSG_GUILD   = MS.CHAT_MSG_
+MS.CHAT_MSG_WHISPER = MS.CHAT_MSG_
+MS.CHAT_MSG_SAY     = MS.CHAT_MSG_
 
 function MS.SaveLink( mogLink )
 	local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})

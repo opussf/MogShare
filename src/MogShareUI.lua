@@ -83,18 +83,22 @@ function MS.UIUpdate()
 	MS.UI_ShowList()
 end
 function MS.UIOnShow()
-	-- print("MS.UIOnShow()")
+	print("MS.UIOnShow()")
+	MS.UI_BuildDropDowns()
 	MS.UI_BuildItemDisplay()
 	MS.UI_ShowList()
 end
 
 ----
+function MS.UI_BuildDropDowns()
+	print("MS.UI_BuildDropDowns()")
 
+end
 function MS.UI_BuildItemDisplay()
 	if not MS.UISet_Buttons then
 		local _, height = MogShareDisplayFrame_MogList:GetSize()
 		local rowCount = math.floor( height / 20 )
-		-- print(height.." high", "rows: "..rowCount)
+		print(height.." high", "rows: "..rowCount)
 
 		MS.UISet_Buttons = {}
 		for rowNum = 1, rowCount do
@@ -146,3 +150,51 @@ MS.sortFunctions = {
 		return MS_Data[a].lastScan > MS_Data[b].lastScan
 	end,
 }
+
+
+
+
+--[[
+
+
+
+function HS.UIInit()
+	HS.TagDropDownBuild( HSConfig_TagDropDownMenu )
+	HS.ModifierDropDownBuild( HSConfig_ModifierDropDownMenu )
+	HS.BuildBars()
+end
+function HS.TagDropDownBuild( self )
+	UIDropDownMenu_Initialize( self, HS.TagDropDownPopulate )
+	UIDropDownMenu_JustifyText( self, "LEFT" )
+end
+function HS.TagDropDownPopulate( self, level, menuList )
+	local tagList = {}
+
+	for hash in pairs( HS_settings.tags ) do
+		table.insert( tagList, hash )
+	end
+	table.sort( tagList )
+	for _, tag in ipairs( tagList ) do
+		info = UIDropDownMenu_CreateInfo()
+		info.text = tag
+		info.notCheckable = true
+		-- info.arg1 = tag
+		info.func = HS.SetTagForEdit
+		UIDropDownMenu_AddButton( info, level )
+	end
+	UIDropDownMenu_SetText( self, tagList[1] )
+	HS.editTag = tagList[1]
+end
+function HS.SetTagForEdit( info )
+	-- takes the info table
+	-- print( "SetTagForEdit( "..info.value.." )" )
+	-- UIDropDownMenu_SetText( )
+	HS.editTag = info.value
+	UIDropDownMenu_SetText( HSConfig_TagDropDownMenu, info.value )
+	HSConfig_TagEditBox:SetText( info.value )
+	HS.UpdateUI()
+end
+
+
+
+]]
