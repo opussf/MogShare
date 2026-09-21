@@ -44,12 +44,13 @@ function MS.OnLoad()
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
 	MogShareFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
-	MogShareFrame:RegisterEvent( "CHAT_MSG_WHISPER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_RAID" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_RAID_LEADER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_SAY" )
-	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY")
-	-- MogShareFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
-	-- MogShareFrame:RegisterEvent("CHAT_MSG_ADDON")
-
+	MogShareFrame:RegisterEvent( "CHAT_MSG_WHISPER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_YELL" )
 end
 function MS.PLAYER_TARGET_CHANGED()
 	-- I still prefer positive checks
@@ -89,9 +90,14 @@ function MS.CHAT_MSG_( msg, sender )
 		-- can I save in a queue to scan later?
 	end
 end
-MS.CHAT_MSG_GUILD   = MS.CHAT_MSG_
-MS.CHAT_MSG_WHISPER = MS.CHAT_MSG_
-MS.CHAT_MSG_SAY     = MS.CHAT_MSG_
+MS.CHAT_MSG_GUILD        = MS.CHAT_MSG_
+MS.CHAT_MSG_PARTY        = MS.CHAT_MSG_
+MS.CHAT_MSG_PARTY_LEADER = MS.CHAT_MSG_
+MS.CHAT_MSG_RAID         = MS.CHAT_MSG_
+MS.CHAT_MSG_RAID_LEADER  = MS.CHAT_MSG_
+MS.CHAT_MSG_SAY          = MS.CHAT_MSG_
+MS.CHAT_MSG_WHISPER      = MS.CHAT_MSG_
+MS.CHAT_MSG_YELL         = MS.CHAT_MSG_
 
 function MS.SaveLink( mogLink )
 	local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
