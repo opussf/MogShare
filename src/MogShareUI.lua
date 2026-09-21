@@ -23,9 +23,7 @@ function MS.Set_mixin:OnRowClick(button)
     -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
 function MS.Set_mixin:OnActionButtonClick(button)
-	print(MS.gameOn, MS.gameItems[1], MS.gameItems[2])
 	if MS.gameOn then
-		print(self.link, self.link == MS.gameItems[1])
 		MS.UpdateElo(
 				(self.link == MS.gameItems[1] and MS.gameItems[1] or MS.gameItems[2]),   -- winner
 				(self.link == MS.gameItems[2] and MS.gameItems[1] or MS.gameItems[2])    -- loser
