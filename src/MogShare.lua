@@ -109,6 +109,7 @@ function MS.SaveLink( mogLink )
 	}
 
 	MS_Data[mogLink] = mogData
+	MS_Archive[mogLink] = nil
 end
 
 function MS.ScanItems()
