@@ -42,7 +42,8 @@ end
 function MS.OnLoad()
 	SLASH_MS1 = "/MS"
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
-	MogShareFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+	MogShareFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
+	MogShareFrame:RegisterEvent( "PLAYER_TARGET_CHANGED" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
@@ -51,6 +52,9 @@ function MS.OnLoad()
 	MogShareFrame:RegisterEvent( "CHAT_MSG_SAY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_WHISPER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_YELL" )
+end
+function MS.PLAYER_ENTERING_WORLD()
+	MS.Prune()
 end
 function MS.PLAYER_TARGET_CHANGED()
 	-- I still prefer positive checks
@@ -86,7 +90,7 @@ function MS.CHAT_MSG_( msg, sender )
 			print("Sent by "..sender..": "..mogLink)
 		end
 	else
-		print("chat messages are secret right now.")
+		-- print("chat messages are secret right now.")
 		-- can I save in a queue to scan later?
 	end
 end
@@ -100,22 +104,33 @@ MS.CHAT_MSG_WHISPER      = MS.CHAT_MSG_
 MS.CHAT_MSG_YELL         = MS.CHAT_MSG_
 
 function MS.SaveLink( mogLink )
-	local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
-	mogData.archived = nil
+	if mogLink then
+		local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
+		mogData.archived = nil
+		local ts = time()
+
+		mogData.lastScan = ts
+
+		mogData.eloData = mogData.eloData or {
+			rating      = 1500,
+			comparisons = 0,
+			wins        = 0,
+			losses      = 0,
+			lastShown   = 0,
+		}
+
+		MS_Data[mogLink] = mogData
+		MS_Archive[mogLink] = nil
+	end
+end
+
+function MS.Prune()
 	local ts = time()
-
-	mogData.lastScan = ts
-
-	mogData.eloData = mogData.eloData or {
-		rating      = 1500,
-		comparisons = 0,
-		wins        = 0,
-		losses      = 0,
-		lastShown   = 0,
-	}
-
-	MS_Data[mogLink] = mogData
-	MS_Archive[mogLink] = nil
+	for mogLink, data in pairs( MS_Archive ) do
+		if data.archived + (30 * 86400) < ts then
+			MS_Archive[mogLink] = nil
+		end
+	end
 end
 
 function MS.ScanItems()

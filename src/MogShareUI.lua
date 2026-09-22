@@ -4,6 +4,8 @@ MS_SLUG, MS = ...
 MS.Set_mixin = {}
 
 function MS.Set_mixin:OnRowClick(button)
+	if button == "RightButton" then
+	end
 	if self.link then
 		if IsModifiedClick("CHATLINK") then
 			-- shift-click: insert the link into the open chat edit box
@@ -281,8 +283,10 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l )
-			return MS_Data[l].eloData.rating..
-					" ("..MS_Data[l].eloData.wins.."W - "..MS_Data[l].eloData.losses.."L - "..MS_Data[l].eloData.comparisons.."C)"
+			return string.format("%i (%iW - %iL - %iC)",
+					MS_Data[l].eloData.rating, MS_Data[l].eloData.wins,
+					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons
+			)
 		end,
 	},
 }
