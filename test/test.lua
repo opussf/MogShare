@@ -96,6 +96,18 @@ function test.test_Prune_oldArchivedData()
 	MS.Prune()
 	assertIsNil( MS_Archive["[myLink]"] )
 end
-
+function test.test_CHAT_MSG_scan_validLink()
+	MS.CHAT_MSG_("|c89abcdef|Hcustomset:blahblahblah|r", "Frank-Realm1" )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblah|r"] )
+end
+function test.test_CHAT_MSG_scan_validLink_multiple()
+	MS.CHAT_MSG_("|c89abcdef|Hcustomset:blahblahblah|r  |c89abcdef|Hcustomset:blahblahblahblah|r", "Frank-Realm1" )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblah|r"] )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblahblah|r"] )
+end
+function test.test_CHAT_MSG_scan_invalidLink()
+	MS.CHAT_MSG_( "|c89abcdef|Hitem:12345::::::::[itemLink]", "Frank-Realm1" )
+	assertIsNil( MS_Data["|c89abcdef|Hitem:12345::::::::[itemLink]"] )
+end
 
 test.run()
