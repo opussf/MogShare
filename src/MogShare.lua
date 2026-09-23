@@ -31,6 +31,7 @@ function MS.OnLoad()
 end
 function MS.PLAYER_ENTERING_WORLD()
 	MS.Prune()
+	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 end
 function MS.PLAYER_TARGET_CHANGED()
 	-- I still prefer positive checks
@@ -98,6 +99,7 @@ function MS.SaveLink( mogLink )
 		MS_Data[mogLink] = mogData
 		MS_Archive[mogLink] = nil
 	end
+	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 end
 
 function MS.Prune()

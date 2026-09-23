@@ -283,9 +283,10 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l )
-			return string.format("%i (%iW - %iL - %iC)",
+			return string.format("%d (%dW - %dL - %dC)%s",
 					MS_Data[l].eloData.rating, MS_Data[l].eloData.wins,
-					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons
+					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons,
+					(MS_Data[l].eloData.comparisons < MS.provisionalThreshold and " |cffff8080†|r" or "")
 			)
 		end,
 	},
