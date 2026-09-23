@@ -52,7 +52,7 @@ function MS.INSPECT_READY(guid)
 
 		local name, realm = UnitName("target")
 		realm = realm or GetRealmName()
-		print("Scanned "..name.."-"..realm..": "..mogLink)
+		print(string.format(MS.L["Scanned %s-%s: %s"], name, realm, mogLink))
 
 		-- MS.ScanItems()
 
@@ -63,7 +63,7 @@ function MS.CHAT_MSG_( msg, sender )
 	if not issecretvalue(msg) then
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
-			print("Sent by "..sender..": "..mogLink)
+			print(string.format(MS.L["Shared by %s: %s"], sender, mogLink))
 		end
 	else
 		-- print("chat messages are secret right now.")
