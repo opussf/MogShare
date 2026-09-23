@@ -9,4 +9,117 @@ DressUpFrame = CreateFrame( "GameTooltip", "DressUpFrame" )
 
 ParseTOC( "../src/MogShare.toc" )
 
+function test.before()
+	chatLog = {}
+	MS_Data = {}
+	MS_Archive = {}
+	MS.provisionalThreshold = nil
+	MogShareFrame.Events.INSPECT_READY = nil
+end
+function test.after()
+	Units["target"] = nil
+end
+
+function test.test_OnLoad_PLAYER_TARGET_CHANGED()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.PLAYER_TARGET_CHANGED )
+end
+function test.test_OnLoad_CHAT_MSG_GUILD()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_GUILD )
+end
+function test.test_OnLoad_CHAT_MSG_PARTY()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_PARTY )
+end
+function test.test_OnLoad_CHAT_MSG_PARTY_LEADER()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_PARTY_LEADER )
+end
+function test.test_OnLoad_CHAT_MSG_RAID()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_RAID )
+end
+function test.test_OnLoad_CHAT_MSG_RAID_LEADER()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_RAID_LEADER )
+end
+function test.test_OnLoad_CHAT_MSG_SAY()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_SAY )
+end
+function test.test_OnLoad_CHAT_MSG_WHISPER()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_WHISPER )
+end
+function test.test_OnLoad_CHAT_MSG_YELL()
+	MS.OnLoad()
+	assertTrue( MogShareFrame.Events.CHAT_MSG_YELL )
+end
+function test.test_PLAYER_TARGET_CHANGED_onPlayer()
+	Units["target"] = Units["player"]
+	Units["target"].isPlayer = true
+	playerRange["target"] = 7
+
+	MS.PLAYER_TARGET_CHANGED()
+
+	assertTrue( MogShareFrame.Events.INSPECT_READY )
+	assertEquals( "playerGUID", MS.pendingGUID )
+end
+function test.test_SaveLink_noCurrentLink_SavesLink()
+	MS.SaveLink("[myLink]")
+	assertTrue( MS_Data["[myLink]"].lastScan)
+	assertTrue( MS_Data["[myLink]"].eloData)
+end
+function test.test_SaveLink_currentLink_LastScan_Updated()
+	MS_Data["[myLink]"] = { lastScan = 5, eloData = {}}
+	MS.SaveLink("[myLink]")
+	assertAlmostEquals( time(), MS_Data["[myLink]"].lastScan, nil, nil, 1 )
+end
+function test.test_SaveLink_archivedLink_archivedCleared()
+	MS_Archive["[myLink]"] = { lastScan = 5, archived = 5 }
+	MS.SaveLink("[myLink]")
+	assertIsNil( MS_Data["[myLink]"].archived )
+	assertIsNil( MS_Archive["[myLink]"] )
+end
+function test.test_SaveLink_archivedLink_eloDataIsIntact()
+	MS_Archive["[myLink]"] = { eloData = { rating = 2046 } }
+	MS.SaveLink("[myLink]")
+	assertEquals( 2046, MS_Data["[myLink]"].eloData.rating )
+end
+function test.test_Prune_noPrune()
+	MS_Archive["[myLink]"] = { lastScan = 5, archived = time()-10 }
+	MS.Prune()
+	assertTrue( MS_Archive["[myLink]"] )
+end
+function test.test_Prune_oldArchivedData()
+	MS_Archive["[myLink]"] = { lastScan = 5, archived = time()-3000000 }
+	MS.Prune()
+	assertIsNil( MS_Archive["[myLink]"] )
+end
+function test.test_CHAT_MSG_scan_validLink()
+	MS.CHAT_MSG_("|c89abcdef|Hcustomset:blahblahblah|r", "Frank-Realm1" )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblah|r"] )
+end
+function test.test_CHAT_MSG_scan_validLink_multiple()
+	MS.CHAT_MSG_("|c89abcdef|Hcustomset:blahblahblah|r  |c89abcdef|Hcustomset:blahblahblahblah|r", "Frank-Realm1" )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblah|r"] )
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblahblahblah|r"] )
+end
+function test.test_CHAT_MSG_scan_invalidLink()
+	MS.CHAT_MSG_( "|c89abcdef|Hitem:12345::::::::[itemLink]", "Frank-Realm1" )
+	assertIsNil( MS_Data["|c89abcdef|Hitem:12345::::::::[itemLink]"] )
+end
+function test.test_PLAYER_ENTERING_WORLD()
+	MS.PLAYER_ENTERING_WORLD()
+	assertEquals( 1, MS.provisionalThreshold )
+end
+function test.test_INSPECT_READY()
+	Units["target"] = Units["player"]
+	Units["target"].isPlayer = true
+	MS.pendingGUID = "playerGUID"
+	MS.INSPECT_READY("playerGUID")
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblah|r"])
+end
+
 test.run()
