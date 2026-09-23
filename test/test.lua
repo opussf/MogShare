@@ -11,6 +11,8 @@ ParseTOC( "../src/MogShare.toc" )
 
 function test.before()
     chatLog = {}
+    MS_Data = {}
+    MS_Archive = {}
     MogShareFrame.Events.INSPECT_READY = nil
 end
 function test.after()
@@ -63,5 +65,27 @@ function test.notest_PLAYER_TARGET_CHANGED_onPlayer()
     test.dump(Units)
     fail()
 end
+function test.test_SaveLink_noCurrentLink_SavesLink()
+    MS.SaveLink("[myLink]")
+    assertTrue( MS_Data["[myLink]"].lastScan)
+    assertTrue( MS_Data["[myLink]"].eloData)
+end
+function test.test_SaveLink_currentLink_LastScan_Updated()
+    MS_Data["[myLink]"] = { lastScan = 5, eloData = {}}
+    MS.SaveLink("[myLink]")
+    assertAlmostEquals( time(), MS_Data["[myLink]"].lastScan, nil, nil, 1 )
+end
+function test.test_SaveLink_archivedLink_archivedCleared()
+    MS_Archive["[myLink]"] = { lastScan = 5, archived = 5 }
+    MS.SaveLink("[myLink]")
+    assertIsNil( MS_Data["[myLink]"].archived )
+    assertIsNil( MS_Archive["[myLink]"] )
+end
+function test.test_SaveLink_archivedLink_eloDataIsIntact()
+    MS_Archive["[myLink]"] = { eloData = { rating = 2046 } }
+    MS.SaveLink("[myLink]")
+    assertEquals( 2046, MS_Data["[myLink]"].eloData.rating )
+end
+
 
 test.run()
