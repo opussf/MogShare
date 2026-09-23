@@ -38,6 +38,7 @@ function MS.Set_mixin:OnActionButtonClick(button)
 
 		MS_Data[self.link] = nil
 	end
+	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
