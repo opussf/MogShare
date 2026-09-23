@@ -1476,6 +1476,9 @@ end
 function IsResting()
 	return true
 end
+function NotifyInspect( who )
+	-- not sure what to do here.  Does not seem to return a value
+end
 function NumTaxiNodes()
 	-- http://www.wowwiki.com/API_NumTaxiNodes
 	local count = 0
@@ -1758,7 +1761,10 @@ end
 function UnitXPMax( who )
 	return 1000
 end
--- function
+function CanInspect( who )
+	-- @TODO: Write this to reference data in the Units structure
+	return true
+end
 ---------  C_WowTokenPublic
 C_WowTokenPublic = {}
 function C_WowTokenPublic.GetCommerceSystemStatus()

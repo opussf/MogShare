@@ -55,15 +55,16 @@ function test.test_OnLoad_CHAT_MSG_YELL()
 	MS.OnLoad()
 	assertTrue( MogShareFrame.Events.CHAT_MSG_YELL )
 end
-function test.notest_PLAYER_TARGET_CHANGED_onPlayer()
+function test.test_PLAYER_TARGET_CHANGED_onPlayer()
 	Units["target"] = Units["player"]
 	Units["target"].isPlayer = true
+	playerRange["target"] = 7
 
-	-- test.dump(UnitExists("target"))
-	-- test.dump(UnitIsPlayer("target"))
-	assertTrue( UnitIsPlayer("target") )
-	test.dump(Units)
-	fail()
+	MS.PLAYER_TARGET_CHANGED()
+	test.dump(MogShareFrame)
+
+	assertTrue( MogShareFrame.Events.INSPECT_READY )
+	assertEquals( "playerGUID", MS.pendingGUID )
 end
 function test.test_SaveLink_noCurrentLink_SavesLink()
 	MS.SaveLink("[myLink]")
