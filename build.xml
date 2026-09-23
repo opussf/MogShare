@@ -106,6 +106,11 @@
 				<patternset refid="imgFiles"/>
 			</fileset>
 		</copy>
+		<copy   todir="${package.dir}">
+			<fileset dir=".">
+				<include name="LICENSE*"/>
+			</fileset>
+		</copy>
 		<zip 	destfile="${target.dir}/${project.zip}"
 				basedir="${working.dir}"
 				includes="${ant.project.name}/**"/>
