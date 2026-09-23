@@ -114,5 +114,12 @@ function test.test_PLAYER_ENTERING_WORLD()
 	MS.PLAYER_ENTERING_WORLD()
 	assertEquals( 1, MS.provisionalThreshold )
 end
+function test.test_INSPECT_READY()
+	Units["target"] = Units["player"]
+	Units["target"].isPlayer = true
+	MS.pendingGUID = "playerGUID"
+	MS.INSPECT_READY("playerGUID")
+	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblah|r"])
+end
 
 test.run()
