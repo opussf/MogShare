@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
 	<!--<Script file="Rested.lua"/> -->
 	<!-- Version 2.0 -->
-	<Button  name="MSSet_template" enableMouse="true" virtual="true" mixin="MS.Set_mixin">
+	<Button  name="MSSet_template" enableMouse="true" virtual="true" mixin="MS.Set_mixin" registerForClicks="LeftButtonUp, RightButtonUp">
 		<Size x="320" y="20"/>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -50,7 +50,7 @@
 		</Scripts>
 	</Frame>
 	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false" hidden="true">
-		<Size x="340" y="500" />
+		<Size x="342" y="500" />
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
@@ -114,7 +114,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent">
 						<Offset>
-							<AbsDimension x="10" y="-70"/>
+							<AbsDimension x="5" y="-70"/>
 						</Offset>
 					</Anchor>
 				</Anchors>

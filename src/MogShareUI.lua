@@ -4,6 +4,8 @@ MS_SLUG, MS = ...
 MS.Set_mixin = {}
 
 function MS.Set_mixin:OnRowClick(button)
+	if button == "RightButton" then
+	end
 	if self.link then
 		if IsModifiedClick("CHATLINK") then
 			-- shift-click: insert the link into the open chat edit box
@@ -36,6 +38,7 @@ function MS.Set_mixin:OnActionButtonClick(button)
 
 		MS_Data[self.link] = nil
 	end
+	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
@@ -281,8 +284,11 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l )
-			return MS_Data[l].eloData.rating..
-					" ("..MS_Data[l].eloData.wins.."W - "..MS_Data[l].eloData.losses.."L - "..MS_Data[l].eloData.comparisons.."C)"
+			return string.format("%d (%dW - %dL - %dC)%s",
+					MS_Data[l].eloData.rating, MS_Data[l].eloData.wins,
+					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons,
+					(MS_Data[l].eloData.comparisons < MS.provisionalThreshold and " |cffff8080†|r" or "")
+			)
 		end,
 	},
 }
