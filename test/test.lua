@@ -13,6 +13,7 @@ function test.before()
 	chatLog = {}
 	MS_Data = {}
 	MS_Archive = {}
+	MS.provisionalThreshold = nil
 	MogShareFrame.Events.INSPECT_READY = nil
 end
 function test.after()
@@ -61,7 +62,6 @@ function test.test_PLAYER_TARGET_CHANGED_onPlayer()
 	playerRange["target"] = 7
 
 	MS.PLAYER_TARGET_CHANGED()
-	test.dump(MogShareFrame)
 
 	assertTrue( MogShareFrame.Events.INSPECT_READY )
 	assertEquals( "playerGUID", MS.pendingGUID )
@@ -109,6 +109,10 @@ end
 function test.test_CHAT_MSG_scan_invalidLink()
 	MS.CHAT_MSG_( "|c89abcdef|Hitem:12345::::::::[itemLink]", "Frank-Realm1" )
 	assertIsNil( MS_Data["|c89abcdef|Hitem:12345::::::::[itemLink]"] )
+end
+function test.test_PLAYER_ENTERING_WORLD()
+	MS.PLAYER_ENTERING_WORLD()
+	assertEquals( 1, MS.provisionalThreshold )
 end
 
 test.run()
