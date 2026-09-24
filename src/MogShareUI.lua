@@ -38,6 +38,7 @@ function MS.Set_mixin:OnActionButtonClick(button)
 
 		MS_Data[self.link] = nil
 	end
+	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 	MS.UI_ShowList()
 end
 function MS.SelectRow(row)
@@ -52,6 +53,13 @@ function MS.GameButtonOnClick()
 		MS.gameItems = nil  -- clear the gameItems when the game ends
 	end
 	MS.UI_ShowList()
+end
+function MS.CheckButton_OnShow( self, option, text )
+	getglobal(self:GetName().."Text"):SetText(text);
+	self:SetChecked(MS_Options[option]);
+end
+function MS.CheckButton_OnClick( self, option )
+	MS_Options[option] = self:GetChecked()
 end
 --------
 
@@ -283,9 +291,10 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l )
-			return string.format("%i (%iW - %iL - %iC)",
+			return string.format("%d (%dW - %dL - %dC)%s",
 					MS_Data[l].eloData.rating, MS_Data[l].eloData.wins,
-					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons
+					MS_Data[l].eloData.losses, MS_Data[l].eloData.comparisons,
+					(MS_Data[l].eloData.comparisons < MS.provisionalThreshold and " |cffff8080†|r" or "")
 			)
 		end,
 	},

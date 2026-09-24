@@ -1476,6 +1476,9 @@ end
 function IsResting()
 	return true
 end
+function NotifyInspect( who )
+	-- not sure what to do here.  Does not seem to return a value
+end
 function NumTaxiNodes()
 	-- http://www.wowwiki.com/API_NumTaxiNodes
 	local count = 0
@@ -1757,6 +1760,10 @@ function UnitXP( who )
 end
 function UnitXPMax( who )
 	return 1000
+end
+function CanInspect( who )
+	-- @TODO: Write this to reference data in the Units structure
+	return true
 end
 ---------  C_WowTokenPublic
 C_WowTokenPublic = {}
@@ -2546,6 +2553,18 @@ end
 function C_Garrison.GetPendingShipmentInfo( index )
 	-- returns
 	return "herbs", 263455, 1, 238763, "nil", 14400, C_Garrison.testData[C_Garrison.plotID].shipments[index]
+end
+
+---------
+-- C_TransmogCollection
+---------
+C_TransmogCollection = {}
+function C_TransmogCollection.GetInspectItemTransmogInfoList()
+	-- @ToDo: Write this better.  Return an empty table for now
+	return {}
+end
+function C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
+	return "|c89abcdef|Hcustomset:blahblah|r"
 end
 
 --------
