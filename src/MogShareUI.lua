@@ -54,6 +54,13 @@ function MS.GameButtonOnClick()
 	end
 	MS.UI_ShowList()
 end
+function MS.CheckButton_OnShow( self, option, text )
+	getglobal(self:GetName().."Text"):SetText(text);
+	self:SetChecked(MS_Options[option]);
+end
+function MS.CheckButton_OnClick( self, option )
+	MS_Options[option] = self:GetChecked()
+end
 --------
 
 function MS.UIOnLoad( mogframe )
