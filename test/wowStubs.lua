@@ -478,6 +478,7 @@ Frame = {
 		["Show"] = function( self ) self.__isShown = true; end,
 		["IsVisible"] = function( self ) return( self.__isShown ) end,
 		["RegisterEvent"] = function(self, event) self.Events[event] = true; end,
+		["RegisterUnitEvent"] = function(self, event, target) self.Events[event] = true; end,
 		["SetPoint"] = function(self, ... ) table.insert( self.points, {...} ); end,
 		["UnregisterEvent"] = function(self, event) self.Events[event] = nil; end,
 		["GetName"] = function(self) return self.framename end,
