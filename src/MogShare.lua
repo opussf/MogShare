@@ -50,11 +50,10 @@ function MS.INSPECT_READY(guid)
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
 		MS.SaveLink( mogLink )
-
 		if MS_Options.showScans then
 			local name, realm = UnitName("target")
 			realm = realm or GetRealmName()
-			MS.Print("Scanned "..name.."-"..realm..": "..mogLink)
+			MS.Print(string.format(MS.L["Scanned %s-%s: %s"], name, realm, mogLink))
 		end
 
 		-- MS.ScanItems()
@@ -67,7 +66,7 @@ function MS.CHAT_MSG_( msg, sender )
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
 			if MS_Options.showScans then
-				MS.Print("Sent by "..sender..": "..mogLink)
+				MS.Print(string.format(MS.L["Shared by %s: %s"], sender, mogLink))
 			end
 		end
 	else
