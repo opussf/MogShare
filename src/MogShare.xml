@@ -114,10 +114,10 @@
 					<Anchor point="LEFT" relativeTo="$parent_GameButton" relativePoint="RIGHT" x="5" y="0" />
 				</Anchors>
 				<Scripts>
-					<OnLoad>self.tooltip = "Show an alert in chat on a successful mog scan."</OnLoad>
+					<OnLoad>self.tooltip = MS.L["Show an alert in chat on a successful mog scan."]</OnLoad>
 					<OnEnter>GameTooltip:SetOwner(self, "ANCHOR_LEFT");GameTooltip:SetText(self.tooltip)</OnEnter>
 					<OnLeave>GameTooltip:Hide()</OnLeave>
-					<OnShow>MS.CheckButton_OnShow(self, "showScans", "Scan Alerts")</OnShow>
+					<OnShow>MS.CheckButton_OnShow(self, "showScans", MS.L["Scan Alerts"])</OnShow>
 					<OnClick>MS.CheckButton_OnClick(self, "showScans")</OnClick>
 				</Scripts>
 			</CheckButton>
