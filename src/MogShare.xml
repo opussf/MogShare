@@ -168,4 +168,6 @@
 			<OnHide>MS.UIOnHide(self)</OnHide>
 		</Scripts>
 	</Frame>
+	<Frame name="MogShareEditFrame" toplevel="false" parent="MogShareDisplayFrame" enableMouse="true" movable="false" hidden="true">
+	</Frame>
 </Ui>
