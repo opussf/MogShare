@@ -9,5 +9,5 @@ if GetLocale() == "ruRU" then
 	L.L["Scanned %s-%s: %s"] = "Просканировано %s-%s: %s"
 	L.L["Show an alert in chat on a successful mog scan."] = "Показывать уведомление в чате при успешном сканировании мога."
 	L.L["Scan Alerts"] = "Уведомления о сканировании"
-	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dП - %dП - %dС)%s"
+	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dВ - %dП - %dС)%s"
 end
