@@ -5,6 +5,7 @@ MS.Set_mixin = {}
 
 function MS.Set_mixin:OnRowClick(button)
 	if button == "RightButton" then
+		MogShareEditFrame:Show()
 	end
 	if self.link then
 		if IsModifiedClick("CHATLINK") then

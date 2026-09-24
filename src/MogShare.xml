@@ -41,12 +41,8 @@
 
 	<Frame name="MogShareFrame" toplevel="false" parent="UIParent" enableMouse="false" movable="false">
 		<Scripts>
-			<OnLoad>
-				MS.OnLoad()
-			</OnLoad>
-			<OnEvent>
-				MS[event]( ... )
-			</OnEvent>
+			<OnLoad>MS.OnLoad()</OnLoad>
+			<OnEvent>MS[event]( ... )</OnEvent>
 		</Scripts>
 	</Frame>
 	<Frame name="MogShareDisplayFrame" toplevel="false" parent="UIParent" enableMouse="true" movable="false" hidden="true">
@@ -169,5 +165,23 @@
 		</Scripts>
 	</Frame>
 	<Frame name="MogShareEditFrame" toplevel="false" parent="MogShareDisplayFrame" enableMouse="true" movable="false" hidden="true">
+		<Size x="350" y="350"/>
+		<Anchors>
+			<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$parent"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_BG" file="Interface\DialogFrame\UI-DialogBox-Background">
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+		</Frames>
+		<Scripts>
+		</Scripts>
 	</Frame>
 </Ui>
