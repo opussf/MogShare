@@ -8,9 +8,3 @@ local function defaultFunc(L, key)
  return key
 end
 setmetatable(L.L, {__index=defaultFunc})
-
-
-
-L.L["Show an alert in chat on a successful mog scan."]
-L.L["Scan Alerts"]
-L.L["%d (%dW - %dL - %dC)%s"]
