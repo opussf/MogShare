@@ -28,6 +28,7 @@ function MS.OnLoad()
 	MogShareFrame:RegisterEvent( "CHAT_MSG_SAY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_WHISPER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_YELL" )
+	MogShareFrame:RegisterUnitEvent( "UNIT_MODEL_CHANGED", "target" )
 end
 function MS.PLAYER_ENTERING_WORLD()
 	MS.Prune()
@@ -37,7 +38,6 @@ function MS.PLAYER_TARGET_CHANGED()
 	-- I still prefer positive checks
 	if UnitExists("target") and UnitIsPlayer("target") then
 		if CanInspect("target") and CheckInteractDistance("target",1) then
-			-- print("New target:", UnitName("target"))
 			NotifyInspect("target")
 			MogShareFrame:RegisterEvent("INSPECT_READY")
 			MS.pendingGUID = UnitGUID("target")
@@ -82,6 +82,7 @@ MS.CHAT_MSG_RAID_LEADER  = MS.CHAT_MSG_
 MS.CHAT_MSG_SAY          = MS.CHAT_MSG_
 MS.CHAT_MSG_WHISPER      = MS.CHAT_MSG_
 MS.CHAT_MSG_YELL         = MS.CHAT_MSG_
+MS.UNIT_MODEL_CHANGED    = MS.PLAYER_TARGET_CHANGED
 
 function MS.Print( msg, showName )
 	-- print to the chat frame
