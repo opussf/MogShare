@@ -50,9 +50,26 @@ function MS.INSPECT_READY(guid)
 		local mogLink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 
 		MS.SaveLink( mogLink )
+
+		local name, realm = UnitName("target")
+		realm = realm or GetRealmName()
+		local faction = UnitFactionGroup("target")
+		local guildName = GetGuildInfo("target")
+		MS_Data[mogLink].playerList = MS_Data[mogLink].playerList or {}
+		MS_Data[mogLink].playerList[name.."-"..realm.."-"..faction.."-"..guildName] = time()
+
+		local className, classFile, classID = UnitClass("target")
+		MS_Data[mogLink].classList = MS_Data[mogLink].classList or {}
+		MS_Data[mogLink].classList[className] = time()
+		MS_Data[mogLink].classList[1] = nil
+		local sortedClasses = {}
+		for c in pairs(MS_Data[mogLink].classList) do
+			table.insert( sortedClasses, c )
+		end
+		table.sort(sortedClasses)
+		MS_Data[mogLink].classList[1] = table.concat( sortedClasses, ", " )
+
 		if MS_Options.showScans then
-			local name, realm = UnitName("target")
-			realm = realm or GetRealmName()
 			MS.Print(string.format(MS.L["Scanned %s-%s: %s"], name, realm, mogLink))
 		end
 
