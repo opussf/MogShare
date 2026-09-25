@@ -82,6 +82,10 @@ function MS.CHAT_MSG_( msg, sender )
 	if not issecretvalue(msg) then
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
+
+			MS_Data[mogLink].sharedBy = MS_Data[mogLink].sharedBy or {}
+			MS_Data[mogLink].sharedBy[sender] = time()
+
 			if MS_Options.showScans then
 				MS.Print(string.format(MS.L["Shared by %s: %s"], sender, mogLink))
 			end
