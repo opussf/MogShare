@@ -20,6 +20,7 @@ function MS.OnLoad()
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
 	MogShareFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
 	MogShareFrame:RegisterEvent( "PLAYER_TARGET_CHANGED" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_CHANNEL" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
@@ -74,6 +75,7 @@ function MS.CHAT_MSG_( msg, sender )
 		-- can I save in a queue to scan later?
 	end
 end
+MS.CHAT_MSG_CHANNEL      = MS.CHAT_MSG_
 MS.CHAT_MSG_GUILD        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY_LEADER = MS.CHAT_MSG_
