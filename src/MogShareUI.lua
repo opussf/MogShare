@@ -213,7 +213,11 @@ function MS.UI_ShowList()
 		count = count + 1
 	end
 end
-
+function MS.UISearchTextChanged(self, userInput)
+    if not userInput then return end -- fires on non-user text changes too (e.g. SetText calls); ignore those
+    MS.searchFilter = self:GetText():lower()
+    MS.UIUpdate()  -- reuse your existing refresh, just have it check MS.searchFilter now
+end
 ------
 -- elo functions
 ------
