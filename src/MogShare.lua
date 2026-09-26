@@ -54,7 +54,7 @@ function MS.INSPECT_READY(guid)
 		local name, realm = UnitName("target")
 		realm = realm or GetRealmName()
 		local faction = UnitFactionGroup("target")
-		local guildName = GetGuildInfo("target")
+		local guildName = GetGuildInfo("target") or ""
 		MS_Data[mogLink].playerList = MS_Data[mogLink].playerList or {}
 		MS_Data[mogLink].playerList[name.."-"..realm.."-"..faction.."-"..guildName] = time()
 
