@@ -23,6 +23,9 @@ function MS.OnLoad()
 	MogShareFrame:RegisterEvent( "CHAT_MSG_BN_WHISPER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_CHANNEL" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_INSTANCE_CHAT" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_INSTANCE_CHAT_LEADER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_OFFICER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_RAID" )
@@ -78,6 +81,9 @@ function MS.CHAT_MSG_( msg, sender )
 end
 MS.CHAT_MSG_BN_WHISPER   = MS.CHAT_MSG_
 MS.CHAT_MSG_CHANNEL      = MS.CHAT_MSG_
+MS.CHAT_MSG_INSTANCE_CHAT= MS.CHAT_MSG_
+MS.CHAT_MSG_INSTANCE_CHAT_LEADER= MS.CHAT_MSG_
+MS.CHAT_MSG_OFFICER      = MS.CHAT_MSG_
 MS.CHAT_MSG_GUILD        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY_LEADER = MS.CHAT_MSG_
