@@ -120,7 +120,7 @@
 			<EditBox name="$parent_SearchBox" parentKey="SearchBox" inherits="SearchBoxTemplate">
 				<Size x="320" y="20"/>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parent_ScanAlertOption" relativePoint="BOTTOMLEFT" x="-5" y="-8"/>
+					<Anchor point="TOPLEFT" relativeTo="$parent_SortDropDownMenu" relativePoint="BOTTOMLEFT" x="-5" y="-8"/>
 				</Anchors>
 				<Scripts>
 					<OnTextChanged>MS.UISearchTextChanged(self, userInput)</OnTextChanged>
