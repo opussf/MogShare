@@ -214,10 +214,19 @@ function MS.UI_ShowList()
 	end
 end
 function MS.UISearchTextChanged(self, userInput)
+	-- userInput is boolean, if the user set the input.
+	if self:GetText() == "" then
+		self.Instructions:Show()
+	else
+		self.Instructions:Hide()
+	end
+
     if not userInput then return end -- fires on non-user text changes too (e.g. SetText calls); ignore those
     MS.searchFilter = self:GetText():lower()
+    print(MS.searchFilter)
     MS.UIUpdate()  -- reuse your existing refresh, just have it check MS.searchFilter now
 end
+
 ------
 -- elo functions
 ------
