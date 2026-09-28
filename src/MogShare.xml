@@ -120,7 +120,8 @@
 			<EditBox name="$parent_SearchBox" parentKey="SearchBox" inherits="SearchBoxTemplate">
 				<Size x="320" y="20"/>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parent_SortDropDownMenu" relativePoint="BOTTOMLEFT" x="-5" y="-8"/>
+					<Anchor point="LEFT" x="10"/>
+					<Anchor point="TOP" relativeTo="$parent_GameButton" relativePoint="BOTTOM" y="-4"/>
 				</Anchors>
 				<Scripts>
 					<OnTextChanged>MS.UISearchTextChanged(self, userInput)</OnTextChanged>
@@ -130,7 +131,8 @@
 			<Frame name="$parent_MogList" parentKey="MogList">
 				<Size x="320" y="394"/>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parent_SearchBox" relativePoint="BOTTOMLEFT" x="5" y="-8"/>
+					<Anchor point="LEFT" x="5"/>
+					<Anchor point="TOP" relativeTo="$parent_SearchBox" relativePoint="BOTTOM" y="-4"/>
   				</Anchors>
 				<Layers>
 					<Layer level="BACKGROUND">
@@ -144,7 +146,7 @@
 				</Scripts>
 			</Frame>
 			<Slider name="$parent_MogListVSlider" orientation="VERTICAL" minValue="0" maxValue="100" defaultValue="0" valueStep="1">
-				<Size x="12" y="420"/>
+				<Size x="12" y="394"/>
 				<Anchors>
 					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_MogList"/>
 				</Anchors>
