@@ -168,12 +168,41 @@ function MS.UI_BuildItemDisplay()
 		end
 	end
 end
-function MS.MogMatched( mogStuct )
+MS.numericFields = {
+	[MS.L["wins"]]   = function(ms) return ms.eloData.wins end,
+	[MS.L["losses"]] = function(ms) return ms.eloData.losses end,
+	[MS.L["rating"]] = function(ms) return ms.eloData.rating end,
+	[MS.L["rank"]]   = function(ms) return ms.eloData.rating end,
+}
+function MS.ParseNumericFilter(textIn)
+	local field, op, num = textIn:match("^(%a+)%s*([<>=]+)%s*(%-?%d+)$")
+	if field and MS.numericFields[field:lower()] then
+		return MS.numericFields[field:lower()], op, tonumber(num)
+	end
+end
+function MS.MatchesNumbericFilter(mogStruct, dataFun, op, num)
+	local value = dataFun(mogStruct)
+	if value then
+		if     op == ">"  then return value >  num
+		elseif op == "<"  then return value <  num
+		elseif op == ">=" then return value >= num
+		elseif op == "<=" then return value <= num
+		elseif op == "="  then return value == num
+		end
+	end
+end
+function MS.MogMatched( mogStruct )
 	if MS.searchFilter and MS.searchFilter ~= "" then
-		if mogStuct.classList and string.find( mogStuct.classList[1]:lower(), MS.searchFilter ) then
+
+		local dataFun, op, num = MS.ParseNumericFilter(MS.searchFilter)
+		if dataFun then
+			return MS.MatchesNumbericFilter(mogStruct, dataFun, op, num)
+		end
+
+		if mogStruct.classList and string.find( mogStruct.classList[1]:lower(), MS.searchFilter ) then
 			return true
 		end
-		for k in pairs( mogStuct.playerList or {} ) do
+		for k in pairs( mogStruct.playerList or {} ) do
 			if string.find( k:lower(), MS.searchFilter ) then
 				return true
 			end
