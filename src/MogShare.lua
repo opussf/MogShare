@@ -185,9 +185,9 @@ end
 function MS.MakeMissingStep()
 	if MS.scanCO then
 		local ok, err = coroutine.resume(MS.scanCO)
-		print(ok, err)
 		if ok then
 			if coroutine.status(MS.scanCO) == "dead" then
+				MS.Print("Item scan is complete.")
 				MS.scanCO = nil
 				return
 			else
