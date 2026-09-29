@@ -133,7 +133,7 @@
 				<Anchors>
 					<Anchor point="LEFT" x="5"/>
 					<Anchor point="TOP" relativeTo="$parent_SearchBox" relativePoint="BOTTOM" y="-4"/>
-  				</Anchors>
+				</Anchors>
 				<Layers>
 					<Layer level="BACKGROUND">
 						<Texture setAllPoints="true">
