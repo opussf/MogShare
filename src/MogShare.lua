@@ -20,7 +20,12 @@ function MS.OnLoad()
 	SlashCmdList["MS"] = function(msg) MS.Command(msg); end
 	MogShareFrame:RegisterEvent( "PLAYER_ENTERING_WORLD" )
 	MogShareFrame:RegisterEvent( "PLAYER_TARGET_CHANGED" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_BN_WHISPER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_CHANNEL" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_GUILD" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_INSTANCE_CHAT" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_INSTANCE_CHAT_LEADER" )
+	MogShareFrame:RegisterEvent( "CHAT_MSG_OFFICER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_PARTY_LEADER" )
 	MogShareFrame:RegisterEvent( "CHAT_MSG_RAID" )
@@ -54,7 +59,7 @@ function MS.INSPECT_READY(guid)
 		local name, realm = UnitName("target")
 		realm = realm or GetRealmName()
 		local faction = UnitFactionGroup("target")
-		local guildName = GetGuildInfo("target")
+		local guildName = GetGuildInfo("target") or ""
 		MS_Data[mogLink].playerList = MS_Data[mogLink].playerList or {}
 		MS_Data[mogLink].playerList[name.."-"..realm.."-"..faction.."-"..guildName] = time()
 
@@ -82,6 +87,10 @@ function MS.CHAT_MSG_( msg, sender )
 	if not issecretvalue(msg) then
 		for mogLink in msg:gmatch(MS.linkPattern) do
 			MS.SaveLink( mogLink )
+
+			MS_Data[mogLink].sharedBy = MS_Data[mogLink].sharedBy or {}
+			MS_Data[mogLink].sharedBy[sender] = time()
+
 			if MS_Options.showScans then
 				MS.Print(string.format(MS.L["Shared by %s: %s"], sender, mogLink))
 			end
@@ -91,6 +100,11 @@ function MS.CHAT_MSG_( msg, sender )
 		-- can I save in a queue to scan later?
 	end
 end
+MS.CHAT_MSG_BN_WHISPER   = MS.CHAT_MSG_
+MS.CHAT_MSG_CHANNEL      = MS.CHAT_MSG_
+MS.CHAT_MSG_INSTANCE_CHAT= MS.CHAT_MSG_
+MS.CHAT_MSG_INSTANCE_CHAT_LEADER= MS.CHAT_MSG_
+MS.CHAT_MSG_OFFICER      = MS.CHAT_MSG_
 MS.CHAT_MSG_GUILD        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY        = MS.CHAT_MSG_
 MS.CHAT_MSG_PARTY_LEADER = MS.CHAT_MSG_
