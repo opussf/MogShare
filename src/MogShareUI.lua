@@ -329,4 +329,14 @@ MS.sortFunctions = {
 		end,
 		text = MS.L["Rank"],
 	},
+		class = {
+		sortFun = function( a, b )
+			if not MS_Data[a].classList or not MS_Data[b].classList then return false end
+			return MS_Data[a].classList[1] < MS_Data[b].classList[1]
+		end,
+		display = function( l )
+			return string.format( "%s", table.concat( MS_Data[l].classList and MS_Data[l].classList or {}, ", " ) )
+		end,
+		text = MS.L["Class"],
+	},
 }
