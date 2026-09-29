@@ -170,9 +170,12 @@ function MS.UI_BuildItemDisplay()
 end
 MS.numericFields = {
 	[MS.L["wins"]]   = function(ms) return ms.eloData.wins end,
+	[MS.L["w"]]      = function(ms) return ms.eloData.wins end,
 	[MS.L["losses"]] = function(ms) return ms.eloData.losses end,
+	[MS.L["l"]]      = function(ms) return ms.eloData.losses end,
 	[MS.L["rating"]] = function(ms) return ms.eloData.rating end,
 	[MS.L["rank"]]   = function(ms) return ms.eloData.rating end,
+	[MS.L["r"]]      = function(ms) return ms.eloData.rating end,
 }
 function MS.ParseNumericFilter(textIn)
 	local field, op, num = textIn:match("^(%a+)%s*([<>=]+)%s*(%-?%d+)$")

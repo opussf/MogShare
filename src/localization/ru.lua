@@ -11,4 +11,11 @@ if GetLocale() == "ruRU" then
 	L.L["Scan Alerts"] = "Уведомления о сканировании"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dВ - %dП - %dС)%s"
 	L.L["Class"] = "Класс"
+	L.L["wins"] = "победы"
+	L.L["w"] = "п"
+	L.L["losses"] = "поражения"
+	L.L["l"] = "п"
+	L.L["rating"] = "рейтинг"
+	L.L["rank"] = "ранг"
+	L.L["r"] = "р"
 end

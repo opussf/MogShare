@@ -11,4 +11,11 @@ if GetLocale() == "ptBR" then
 	L.L["Scan Alerts"] = "Alertas de varredura"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dV - %dD - %dC)%s"
 	L.L["Class"] = "Classe"
+	L.L["wins"] = "vitórias"
+	L.L["w"] = "v"
+	L.L["losses"] = "derrotas"
+	L.L["l"] = "d"
+	L.L["rating"] = "classificação"
+	L.L["rank"] = "patente"
+	L.L["r"] = "p"
 end

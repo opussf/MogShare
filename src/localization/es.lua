@@ -11,4 +11,11 @@ if GetLocale() == "esES" or GetLocale() == "esMX" then
 	L.L["Scan Alerts"] = "Alertas de escaneo"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dV - %dD - %dC)%s"
 	L.L["Class"] = "Clase"
+	L.L["wins"] = "victorias"
+	L.L["w"] = "v"
+	L.L["losses"] = "derrotas"
+	L.L["l"] = "d"
+	L.L["rating"] = "clasificación"
+	L.L["rank"] = "rango"
+	L.L["r"] = "r"
 end

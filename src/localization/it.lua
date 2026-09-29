@@ -11,4 +11,11 @@ if GetLocale() == "itIT" then
 	L.L["Scan Alerts"] = "Avvisi di scansione"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dV - %dS - %dC)%s"
 	L.L["Class"] = "Classe"
+	L.L["wins"] = "vittorie"
+	L.L["w"] = "v"
+	L.L["losses"] = "sconfitte"
+	L.L["l"] = "s"
+	L.L["rating"] = "valutazione"
+	L.L["rank"] = "grado"
+	L.L["r"] = "g"
 end

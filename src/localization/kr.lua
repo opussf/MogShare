@@ -11,4 +11,11 @@ if GetLocale() == "koKR" then
 	L.L["Scan Alerts"] = "스캔 알림"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%d승 - %d패 - %d비교)%s"
 	L.L["Class"] = "직업"
+	L.L["wins"] = "승리"
+	L.L["w"] = "승"
+	L.L["losses"] = "패배"
+	L.L["l"] = "패"
+	L.L["rating"] = "평점"
+	L.L["rank"] = "순위"
+	L.L["r"] = "순"
 end

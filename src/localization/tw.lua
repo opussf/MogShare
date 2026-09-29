@@ -11,4 +11,11 @@ if GetLocale() == "zhTW" then
 	L.L["Scan Alerts"] = "掃描提醒"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d（%d勝 - %d負 - %d比較）%s"
 	L.L["Class"] = "職業"
+	L.L["wins"] = "勝場"
+	L.L["w"] = "勝"
+	L.L["losses"] = "負場"
+	L.L["l"] = "負"
+	L.L["rating"] = "評分"
+	L.L["rank"] = "排名"
+	L.L["r"] = "排"
 end

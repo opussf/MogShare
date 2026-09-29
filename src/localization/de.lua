@@ -11,4 +11,11 @@ if GetLocale() == "deDE" then
 	L.L["Scan Alerts"] = "Scan-Benachrichtigungen"
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dS - %dN - %dV)%s"
 	L.L["Class"] = "Klasse"
+	L.L["wins"] = "siege"
+	L.L["w"] = "s"
+	L.L["losses"] = "niederlagen"
+	L.L["l"] = "n"
+	L.L["rating"] = "wertung"
+	L.L["rank"] = "rang"
+	L.L["r"] = "r"
 end
