@@ -2567,6 +2567,9 @@ end
 function C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(targetMogList)
 	return "|c89abcdef|Hcustomset:blahblah|r"
 end
+function C_TransmogCollection.GetItemTransmogInfoListFromCustomSetHyperlink(mogLink)
+	return {}
+end
 
 --------
 -- 12.0.0 stubs

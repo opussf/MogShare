@@ -210,6 +210,11 @@ function MS.MogMatched( mogStruct )
 				return true
 			end
 		end
+		for i in pairs( mogStruct.itemNames or {} ) do
+			if string.find( i:lower(), MS.searchFilter ) then
+				return true
+			end
+		end
 	else
 		return true  -- match if searchFiler is nil (no search)
 	end
