@@ -12,7 +12,7 @@ if GetLocale() == "ruRU" then
 	L.L["%d (%dW - %dL - %dC)%s"] = "%d (%dВ - %dП - %dС)%s"
 	L.L["Class"] = "Класс"
 	L.L["wins"] = "победы"
-	L.L["w"] = "п"
+	L.L["w"] = "в"
 	L.L["losses"] = "поражения"
 	L.L["l"] = "п"
 	L.L["rating"] = "рейтинг"

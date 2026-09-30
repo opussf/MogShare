@@ -183,7 +183,7 @@ MS.numericFields = {
 	[MS.L["r"]]      = function(ms) return ms.eloData.rating end,
 }
 function MS.ParseNumericFilter(textIn)
-	local field, op, num = textIn:match("^(%a+)%s*([<>=]+)%s*(%-?%d+)$")
+	local field, op, num = textIn:match("^(.+)%s*([<>=]+)%s*(%-?%d+)$")
 	if field and MS.numericFields[field:lower()] then
 		return MS.numericFields[field:lower()], op, tonumber(num)
 	end
