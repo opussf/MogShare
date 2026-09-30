@@ -124,7 +124,6 @@ function MS.Print( msg, showName )
 	end
 	DEFAULT_CHAT_FRAME:AddMessage( msg )
 end
-
 function MS.SaveLink( mogLink )
 	if mogLink then
 		local mogData = MS_Data[mogLink] or (MS_Archive[mogLink] or {})
@@ -149,7 +148,6 @@ function MS.SaveLink( mogLink )
 	end
 	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 end
-
 function MS.Prune()
 	local ts = time()
 	local prune_age = 30 * 86400
@@ -159,7 +157,6 @@ function MS.Prune()
 		end
 	end
 end
-
 function MS.ScanItems( mogLink )
 	local list = C_TransmogCollection.GetItemTransmogInfoListFromCustomSetHyperlink( mogLink )
 	if list then
@@ -181,29 +178,32 @@ function MS.ScanItems( mogLink )
 		end
 	end
 end
-
 function MS.MakeMissingStep()
 	if MS.scanCO then
 		local ok, err = coroutine.resume(MS.scanCO)
 		if ok then
 			if coroutine.status(MS.scanCO) == "dead" then
-				MS.Print("Item scan is complete.")
+				local elapsed = time() - MS.scanStart
+				MS.Print(string.format(MS.L["Item scan is complete after %s."], SecondsToTime(elapsed)))
+				MS.scanStart = nil
 				MS.scanCO = nil
 				return
 			else
 				C_Timer.After(0.5, MS.MakeMissingStep)  -- schedule next step
 			end
 		else
-			MS.Print("There was an error ("..err..")")
+			MS.Print(string.format(MS.L["There was an error (%s)"], err))
 			MS.scanCO = nil
 		end
 	end
 end
-
 function MS.MakeMissingItemLists()
 	if MS.scanCO and coroutine.status(MS.scanCO) ~= "dead" then
 		return  -- already running
 	end
+
+	MS.Print(MS.L["Starting Item scan."])
+	MS.scanStart = time()
 
 	MS.scanCO = coroutine.create(function()
 		for mogLink, data in pairs(MS_Data) do
@@ -216,7 +216,6 @@ function MS.MakeMissingItemLists()
 
 	MS.MakeMissingStep()
 end
-
 function MS.Command(msg)
 	MogShareDisplayFrame:Show()
 end

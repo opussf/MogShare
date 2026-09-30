@@ -49,8 +49,13 @@ function MS.GameButtonOnClick()
 	MS.gameOn = not MS.gameOn
 	if MS.gameOn then
 		MogShareDisplayFrame_MogListVSlider:SetValue(0)  -- short list (make sure scroll is at the top)
+		MogShareDisplayFrame_SearchBox:Disable()
+		MogShareDisplayFrame_SearchBox:ClearFocus()
+		MogShareDisplayFrame_SearchBox:SetTextColor(0.5, 0.5, 0.5)
 	else
 		MS.gameItems = nil  -- clear the gameItems when the game ends
+		MogShareDisplayFrame_SearchBox:Enable()
+		MogShareDisplayFrame_SearchBox:SetTextColor(1, 1, 1)
 	end
 	MS.UI_ShowList()
 end
