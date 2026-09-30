@@ -18,4 +18,7 @@ if GetLocale() == "itIT" then
 	L.L["rating"] = "valutazione"
 	L.L["rank"] = "grado"
 	L.L["r"] = "g"
+	L.L["Item scan is complete after %s."] = "La scansione degli oggetti è completata dopo %s."
+	L.L["There was an error (%s)"] = "Si è verificato un errore (%s)"
+	L.L["Starting Item scan."] = "Avvio della scansione degli oggetti."
 end

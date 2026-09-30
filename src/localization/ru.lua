@@ -18,4 +18,7 @@ if GetLocale() == "ruRU" then
 	L.L["rating"] = "рейтинг"
 	L.L["rank"] = "ранг"
 	L.L["r"] = "р"
+	L.L["Item scan is complete after %s."] = "Сканирование предметов завершено за %s."
+	L.L["There was an error (%s)"] = "Произошла ошибка (%s)"
+	L.L["Starting Item scan."] = "Начинается сканирование предметов."
 end

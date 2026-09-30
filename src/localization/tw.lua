@@ -18,4 +18,7 @@ if GetLocale() == "zhTW" then
 	L.L["rating"] = "評分"
 	L.L["rank"] = "排名"
 	L.L["r"] = "排"
+	L.L["Item scan is complete after %s."] = "物品掃描在 %s 後完成。"
+	L.L["There was an error (%s)"] = "發生錯誤（%s）"
+	L.L["Starting Item scan."] = "開始掃描物品。"
 end

@@ -18,4 +18,7 @@ if GetLocale() == "ptBR" then
 	L.L["rating"] = "classificação"
 	L.L["rank"] = "patente"
 	L.L["r"] = "p"
+	L.L["Item scan is complete after %s."] = "A verificação de itens foi concluída após %s."
+	L.L["There was an error (%s)"] = "Ocorreu um erro (%s)"
+	L.L["Starting Item scan."] = "Iniciando a verificação de itens."
 end

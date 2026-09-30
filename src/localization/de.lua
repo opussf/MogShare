@@ -18,4 +18,7 @@ if GetLocale() == "deDE" then
 	L.L["rating"] = "wertung"
 	L.L["rank"] = "rang"
 	L.L["r"] = "r"
+	L.L["Item scan is complete after %s."] = "Der Gegenstandsscan ist nach %s abgeschlossen."
+	L.L["There was an error (%s)"] = "Es ist ein Fehler aufgetreten (%s)"
+	L.L["Starting Item scan."] = "Gegenstandsscan wird gestartet."
 end

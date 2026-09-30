@@ -18,4 +18,7 @@ if GetLocale() == "frFR" then
 	L.L["rating"] = "cote"
 	L.L["rank"] = "rang"
 	L.L["r"] = "r"
+	L.L["Item scan is complete after %s."] = "L’analyse des objets est terminée après %s."
+	L.L["There was an error (%s)"] = "Une erreur s’est produite (%s)"
+	L.L["Starting Item scan."] = "Démarrage de l’analyse des objets."
 end

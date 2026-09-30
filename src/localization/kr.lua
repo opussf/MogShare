@@ -18,4 +18,7 @@ if GetLocale() == "koKR" then
 	L.L["rating"] = "평점"
 	L.L["rank"] = "순위"
 	L.L["r"] = "순"
+	L.L["Item scan is complete after %s."] = "%s 후 아이템 검색이 완료되었습니다."
+	L.L["There was an error (%s)"] = "오류가 발생했습니다 (%s)"
+	L.L["Starting Item scan."] = "아이템 검색을 시작합니다."
 end

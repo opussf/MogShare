@@ -18,4 +18,7 @@ if GetLocale() == "esES" or GetLocale() == "esMX" then
 	L.L["rating"] = "clasificación"
 	L.L["rank"] = "rango"
 	L.L["r"] = "r"
+	L.L["Item scan is complete after %s."] = "El escaneo de objetos se ha completado tras %s."
+	L.L["There was an error (%s)"] = "Se ha producido un error (%s)"
+	L.L["Starting Item scan."] = "Iniciando el escaneo de objetos."
 end
