@@ -91,6 +91,8 @@ end
 function MS.UIOpenFrame( mogframe )
 	-- print("MS.UIOpenFrame")
 	mogframe:Show()
+	MogShareDisplayFrame_SearchBox:Enable()
+	MogShareDisplayFrame_SearchBox:SetTextColor(1, 1, 1)
 end
 function MS.UIMoveFrame( mogframe )
 	mogframe:ClearAllPoints()
