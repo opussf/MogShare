@@ -366,7 +366,12 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l ) -- l is the link
-			return date("%c", MS_Data[l].lastScan)
+			local diff = time() - MS_Data[l].lastScan
+			if diff < 86400 then
+				return date("%X", MS_Data[l].lastScan)
+			else
+				return date("%x %X", MS_Data[l].lastScan)
+			end
 		end,
 		text = MS.L["Last Scan"],
 	},
