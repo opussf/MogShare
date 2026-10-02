@@ -376,7 +376,7 @@ MS.sortFunctions = {
 					and now.day == mogTime.day then
 				return date("%X", MS_Data[l].lastScan)
 			elseif diff < 604800 then
-				return date("%a %X", MS_Data[l].lastScan)
+				return date("%a, %X", MS_Data[l].lastScan)
 			else
 				return date("%x %X", MS_Data[l].lastScan)
 			end
