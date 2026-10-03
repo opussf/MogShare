@@ -74,7 +74,6 @@ function MS.Set_mixin:OnEnter()
 				if i > 20 then break end
 				local name, realm = player.pName:match("^(.-)-(.-)-")
 				if name and realm then
-					playerCount = playerCount + 1
 					GameTooltip:AddDoubleLine(
 							name.."-"..realm, date("%x", player.ts))
 				end
