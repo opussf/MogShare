@@ -271,6 +271,9 @@ function MS.MogMatched( mogStruct )
 		if mogStruct.classList and string.find( mogStruct.classList[1]:lower(), MS.searchFilter ) then
 			return true
 		end
+		if string.find( date("%B", mogStruct.lastScan):lower(), MS.searchFilter ) then
+			return true
+		end
 		for k in pairs( mogStruct.playerList or {} ) do
 			if string.find( k:lower(), MS.searchFilter ) then
 				return true
