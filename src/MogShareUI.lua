@@ -64,10 +64,21 @@ function MS.Set_mixin:OnEnter()
 					string.format("%s: %s", MS.L["Class"],
 					MS_Data[self.link].classList[1]))
 		end
-		for p, ts in pairs( MS_Data[self.link].playerList or {} ) do
-			local name, realm = p:match("^(.-)-(.-)-")
-			GameTooltip:AddDoubleLine(
-				name.."-"..realm, date("%x", ts))
+		if MS_Data[self.link].playerList then
+			local players = {}
+			for pName, ts in pairs( MS_Data[self.link].playerList ) do
+				table.insert( players, {ts=ts, pName=pName} )
+			end
+			table.sort( players, function(a, b) return a.ts > b.ts end )
+			for i, player in ipairs( players ) do
+				if i > 20 then break end
+				local name, realm = player.pName:match("^(.-)-(.-)-")
+				if name and realm then
+					playerCount = playerCount + 1
+					GameTooltip:AddDoubleLine(
+							name.."-"..realm, date("%x", player.ts))
+				end
+			end
 		end
 
 		GameTooltip:Show()
