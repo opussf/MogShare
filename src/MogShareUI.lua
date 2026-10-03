@@ -56,10 +56,14 @@ function MS.Set_mixin:OnEnter()
 					MS_Data[self.link].eloData.rating, MS_Data[self.link].eloData.wins,
 					MS_Data[self.link].eloData.losses, MS_Data[self.link].eloData.comparisons, ""),
 				0.6, 0.6, 0.6)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(
-				string.format("%s: %s", MS.L["Class"],
-				MS_Data[self.link].classList and MS_Data[self.link].classList[1] or ""))
+		if MS_Data[self.link].classList or MS_Data[self.link].playerList then
+			GameTooltip:AddLine(" ")
+		end
+		if MS_Data[self.link].classList and MS_Data[self.link].classList[1] then
+			GameTooltip:AddLine(
+					string.format("%s: %s", MS.L["Class"],
+					MS_Data[self.link].classList[1]))
+		end
 		for p, ts in pairs( MS_Data[self.link].playerList or {} ) do
 			local name, realm = p:match("^(.-)-(.-)-")
 			GameTooltip:AddDoubleLine(
