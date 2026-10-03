@@ -366,7 +366,20 @@ MS.sortFunctions = {
 			return MS_Data[a].lastScan > MS_Data[b].lastScan
 		end,
 		display = function( l ) -- l is the link
-			return date("%c", MS_Data[l].lastScan)
+			-- since there is no OnUpdate, showing SecondsToTime does not make sense.
+			local now = date("*t")
+			local mogTime = date("*t", MS_Data[l].lastScan)
+			local diff = time() - MS_Data[l].lastScan
+
+			if now.year == mogTime.year
+					and now.month == mogTime.month
+					and now.day == mogTime.day then
+				return date("%X", MS_Data[l].lastScan)
+			elseif diff < 604800 then
+				return date("%a, %X", MS_Data[l].lastScan)
+			else
+				return date("%x %X", MS_Data[l].lastScan)
+			end
 		end,
 		text = MS.L["Last Scan"],
 	},
