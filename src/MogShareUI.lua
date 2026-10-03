@@ -41,6 +41,38 @@ function MS.Set_mixin:OnActionButtonClick(button)
 	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 	MS.UI_ShowList()
 end
+function MS.Set_mixin:OnEnter()
+	if self.link then
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:ClearLines()
+
+		GameTooltip:AddLine(
+				string.format("%s: %s", MS.L["Last Scan"], date("%X %x", MS_Data[self.link].lastScan)),
+				1, 1, 1)
+		GameTooltip:AddLine(" ")
+
+		GameTooltip:AddLine(
+				string.format(MS.L["%d (%dW - %dL - %dC)%s"],
+					MS_Data[self.link].eloData.rating, MS_Data[self.link].eloData.wins,
+					MS_Data[self.link].eloData.losses, MS_Data[self.link].eloData.comparisons, ""),
+				0.6, 0.6, 0.6)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(
+				string.format("%s: %s", MS.L["Class"],
+				MS_Data[self.link].classList and MS_Data[self.link].classList[1] or ""))
+		for p, ts in pairs( MS_Data[self.link].playerList or {} ) do
+			local name, realm = p:match("^(.-)-(.-)-")
+			GameTooltip:AddDoubleLine(
+				name.."-"..realm, date("%x", ts))
+		end
+
+		GameTooltip:Show()
+	end
+end
+function MS.Set_mixin:OnLeave()
+	GameTooltip:Hide()
+end
+---------
 function MS.SelectRow(row)
 	MS.selectedLink = row.link
 	MS.UI_ShowList()  -- force update
