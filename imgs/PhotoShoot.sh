@@ -14,5 +14,7 @@ for file in "/Applications/World of Warcraft/_retail_/Screenshots/"*.{png,jpg}; 
 	sips --cropToHeightWidth $HEIGHT $WIDTH \
 	     --cropOffset $Y $X \
 	     "$file" \
-	     --out ./new/"$outfile"
+	     --out ./new/"$outfile" &
 done
+wait
+open new
