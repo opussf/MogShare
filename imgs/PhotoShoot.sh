@@ -11,10 +11,13 @@ for file in "/Applications/World of Warcraft/_retail_/Screenshots/"*.{png,jpg}; 
 	[ -f "$file" ] || continue
 	outfile="MogShare_"$(basename "$file")
 
-	sips --cropToHeightWidth $HEIGHT $WIDTH \
-	     --cropOffset $Y $X \
-	     "$file" \
-	     --out ./new/"$outfile" &
+	(
+		sips --cropToHeightWidth $HEIGHT $WIDTH \
+		     --cropOffset $Y $X \
+		     "$file" \
+		     --out ./new/"$outfile" >/dev/null \
+		&& touch -r "$file" ./new/"$outfile"
+	) &
 done
 wait
 open new
