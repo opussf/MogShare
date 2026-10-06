@@ -1,10 +1,26 @@
 MS_SLUG, MS = ...
 
+function MS.UI_ContextMenuCallBack( owner, root )
+	root:CreateTitle("Hi Frank")
+end
+
 -- mixin
 MS.Set_mixin = {}
 
 function MS.Set_mixin:OnRowClick(button)
 	if button == "RightButton" then
+		MenuUtil.CreateContextMenu(self, MS.UI_ContextMenuCallBack)
+		MenuUtil.CreateButton("Reset Rank",
+				function()
+					MS_Data[self.link].eloData = {
+						rating      = 1500,
+						comparisons = 0,
+						wins        = 0,
+						losses      = 0,
+						lastShown   = 0,
+					}
+				end)
+		return
 	end
 	if self.link then
 		if IsModifiedClick("CHATLINK") then
