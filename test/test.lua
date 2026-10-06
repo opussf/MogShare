@@ -122,4 +122,9 @@ function test.test_INSPECT_READY()
 	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblah|r"])
 end
 
+-- MogShareUI
+function test.test_Set_mixin_OnRowClick()
+	MS.Set_mixin:OnRowClick()
+end
+
 test.run()
