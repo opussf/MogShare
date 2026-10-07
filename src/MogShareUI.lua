@@ -1,7 +1,7 @@
 MS_SLUG, MS = ...
 
 StaticPopupDialogs["MS_EDIT_NAME"] = {
-	text = MS.L["Add a note for this set:"],
+	text = MS.L["Name this set:"],
 	button1 = SAVE,
 	button2 = CANCEL,
 	hasEditBox = true,
@@ -34,7 +34,7 @@ function MS.UI_ContextMenuCallBack( owner, root )
 				StaticPopup_Show("MS_EDIT_NAME", nil, nil, {link=owner.link})
 			end)
 	root:CreateDivider()
-	root:CreateButton("Reset Rank",
+	root:CreateButton(MS.L["Reset Rank"],
 			function()
 				MS_Data[owner.link].eloData = {
 					rating      = 1500,
