@@ -28,7 +28,7 @@ StaticPopupDialogs["MS_EDIT_NAME"] = {
 }
 
 function MS.UI_ContextMenuCallBack( owner, root )
-	root:CreateTitle("Hi Frank")
+	-- root:CreateTitle("Hi Frank")
 	root:CreateButton(MS_Data[owner.link].name and MS.L["Edit Name"] or MS.L["Add Name"],
 			function()
 				StaticPopup_Show("MS_EDIT_NAME", nil, nil, {link=owner.link})
