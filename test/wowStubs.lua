@@ -420,6 +420,8 @@ SOUNDKIT = {
 	ALARM_CLOCK_WARNING_1 = 18871,
 }
 
+StaticPopupDialogs = {}
+
 -- WOW's functions
 function getglobal( globalStr )
 	-- set the globals table to return what is needed from the 'globals'

@@ -61,9 +61,12 @@ function MS.INSPECT_READY(guid)
 		realm = realm or GetRealmName()
 		local faction = UnitFactionGroup("target")
 		local guildName = GetGuildInfo("target") or ""
-		if name and realm then
+		if name and realm and faction then
 			MS_Data[mogLink].playerList = MS_Data[mogLink].playerList or {}
-			MS_Data[mogLink].playerList[name.."-"..realm.."-"..faction.."-"..guildName] = time()
+			local nameKey = name.."-"..realm.."-"..faction.."-"..guildName
+			if not issecretvalue(nameKey) then
+				MS_Data[mogLink].playerList[nameKey] = time()
+			end
 
 			local className, classFile, classID = UnitClass("target")
 			MS_Data[mogLink].classList = MS_Data[mogLink].classList or {}
