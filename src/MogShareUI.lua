@@ -1,7 +1,49 @@
 MS_SLUG, MS = ...
 
+StaticPopupDialogs["MS_EDIT_NAME"] = {
+    text = MS.L["Add a note for this set:"],
+    button1 = SAVE,
+    button2 = CANCEL,
+    hasEditBox = true,
+    maxLetters = 60,
+    OnShow = function(self, data)
+        self.EditBox:SetText(MS_Data[data.link].name or "")
+        self.EditBox:HighlightText()
+    end,
+    OnAccept = function(self, data)
+        local text = self.EditBox:GetText()
+        MS_Data[data.link].name = (text ~= "") and text or nil
+        MS.UIUpdate()
+    end,
+    EditBoxOnEnterPressed = function(self)
+        local parent = self:GetParent()
+        parent.button1:Click()
+    end,
+    EditBoxOnEscapePressed = function(self)
+        self:GetParent():Hide()
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+}
+
 function MS.UI_ContextMenuCallBack( owner, root )
 	root:CreateTitle("Hi Frank")
+	root:CreateButton(MS_Data[owner.link].name and MS.L["Edit Name"] or MS.L["Add Name"],
+			function()
+				StaticPopup_Show("MS_EDIT_NAME", nil, nil, {link=owner.link})
+			end)
+	root:CreateDivider()
+	root:CreateButton("Reset Rank",
+			function()
+				MS_Data[owner.link].eloData = {
+					rating      = 1500,
+					comparisons = 0,
+					wins        = 0,
+					losses      = 0,
+					lastShown   = 0,
+				}
+			end)
 end
 
 -- mixin
@@ -10,16 +52,7 @@ MS.Set_mixin = {}
 function MS.Set_mixin:OnRowClick(button)
 	if button == "RightButton" then
 		MenuUtil.CreateContextMenu(self, MS.UI_ContextMenuCallBack)
-		MenuUtil.CreateButton("Reset Rank",
-				function()
-					MS_Data[self.link].eloData = {
-						rating      = 1500,
-						comparisons = 0,
-						wins        = 0,
-						losses      = 0,
-						lastShown   = 0,
-					}
-				end)
+
 		return
 	end
 	if self.link then
