@@ -16,3 +16,5 @@ Use Goldchal
 
 8 Scan - search by month
 9 Scan - search by monthyear
+
+10 Archived ?
