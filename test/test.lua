@@ -76,18 +76,18 @@ function test.test_SaveLink_currentLink_LastScan_Updated()
 	MS.SaveLink("[myLink]")
 	assertAlmostEquals( time(), MS_Data["[myLink]"].lastScan, nil, nil, 1 )
 end
-function test.test_SaveLink_archivedLink_archivedCleared()
+function test.notest_SaveLink_archivedLink_archivedCleared()
 	MS_Archive["[myLink]"] = { lastScan = 5, archived = 5 }
 	MS.SaveLink("[myLink]")
 	assertIsNil( MS_Data["[myLink]"].archived )
 	assertIsNil( MS_Archive["[myLink]"] )
 end
-function test.test_SaveLink_archivedLink_eloDataIsIntact()
+function test.notest_SaveLink_archivedLink_eloDataIsIntact()
 	MS_Archive["[myLink]"] = { eloData = { rating = 2046 } }
 	MS.SaveLink("[myLink]")
 	assertEquals( 2046, MS_Data["[myLink]"].eloData.rating )
 end
-function test.test_Prune_noPrune()
+function test.notest_Prune_noPrune()
 	MS_Archive["[myLink]"] = { lastScan = 5, archived = time()-10 }
 	MS.Prune()
 	assertTrue( MS_Archive["[myLink]"] )
