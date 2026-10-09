@@ -183,6 +183,25 @@ function test.test_ELO_PickNextPair_Two_notSame()
 	local items = MS.PickNextPair()
 	assertEquals( items[1] == "l1" and "l2" or "l1", items[2] )
 end
+function test.test_ELO_UpDateElo_firstWinner()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	MS.UpdateElo( "l1", "l2" )
+
+	assertEquals( 1516, MS_Data["l1"].eloData.rating )
+	assertEquals( 1484, MS_Data["l2"].eloData.rating )
+end
+function test.test_ELO_UpDateElo_bigUpset()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	MS_Data["l1"].eloData.rating=0
+	MS_Data["l2"].eloData.rating=10000
+
+	MS.UpdateElo( "l1", "l2" )
+
+	assertEquals( 32, MS_Data["l1"].eloData.rating )
+	assertEquals( 9968, MS_Data["l2"].eloData.rating )
+end
 
 -- MogShareUI
 function test.test_Set_mixin_OnRowClick()
