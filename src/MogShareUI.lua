@@ -1,10 +1,59 @@
 MS_SLUG, MS = ...
 
+StaticPopupDialogs["MS_EDIT_NAME"] = {
+	text = MS.L["Name this set:"],
+	button1 = SAVE,
+	button2 = CANCEL,
+	hasEditBox = true,
+	maxLetters = 60,
+	OnShow = function(self, data)
+		self.EditBox:SetText(MS_Data[data.link].name or "")
+		self.EditBox:HighlightText()
+	end,
+	OnAccept = function(self, data)
+		local text = self.EditBox:GetText()
+		MS_Data[data.link].name = (text ~= "") and text or nil
+		MS.UIUpdate()
+	end,
+	EditBoxOnEnterPressed = function(self)
+		local b1 = _G[self:GetParent():GetName().."Button1"]
+		b1:Click()
+	end,
+	EditBoxOnEscapePressed = function(self)
+		self:GetParent():Hide()
+	end,
+	timeout = 0,
+	whileDead = true,
+	hideOnEscape = true,
+}
+
+function MS.UI_ContextMenuCallBack( owner, root )
+	-- root:CreateTitle("Hi Frank")
+	root:CreateButton(MS_Data[owner.link].name and MS.L["Edit Name"] or MS.L["Add Name"],
+			function()
+				StaticPopup_Show("MS_EDIT_NAME", nil, nil, {link=owner.link})
+			end)
+	root:CreateDivider()
+	root:CreateButton(MS.L["Reset Rank"],
+			function()
+				MS_Data[owner.link].eloData = {
+					rating      = 1500,
+					comparisons = 0,
+					wins        = 0,
+					losses      = 0,
+					lastShown   = 0,
+				}
+			end)
+end
+
 -- mixin
 MS.Set_mixin = {}
 
 function MS.Set_mixin:OnRowClick(button)
 	if button == "RightButton" then
+		MenuUtil.CreateContextMenu(self, MS.UI_ContextMenuCallBack)
+
+		return
 	end
 	if self.link then
 		if IsModifiedClick("CHATLINK") then
@@ -21,8 +70,6 @@ function MS.Set_mixin:OnRowClick(button)
 		end
 	end
 	MS.SelectRow(self)
-    -- print("Row clicked:", self.Text:GetText())
-    -- self is the row button itself, so self.Text / self.ActionButton work here too
 end
 function MS.Set_mixin:OnActionButtonClick(button)
 	if MS.gameOn then
@@ -31,12 +78,10 @@ function MS.Set_mixin:OnActionButtonClick(button)
 				(self.link == MS.gameItems[2] and MS.gameItems[1] or MS.gameItems[2])    -- loser
 		)
 		MS.gameItems = nil
-	else
-		print("Archiving: "..self.link)
-		MS_Archive[self.link] = MS_Data[self.link]
-		MS_Archive[self.link].archived = time()
-
-		MS_Data[self.link] = nil
+	elseif MS.showArchived then  -- restoring
+		MS_Data[self.link].archived = nil
+	else  -- Archiving
+		MS_Data[self.link].archived = time()
 	end
 	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
 	MS.UI_ShowList()
@@ -47,7 +92,7 @@ function MS.Set_mixin:OnEnter()
 		GameTooltip:ClearLines()
 
 		GameTooltip:AddLine(
-				string.format("%s: %s", MS.L["Last Scan"], date("%X %x", MS_Data[self.link].lastScan)),
+				MS_Data[self.link].name or string.format("%s: %s", MS.L["Last Scan"], date("%X %x", MS_Data[self.link].lastScan)),
 				1, 1, 1)
 		GameTooltip:AddLine(" ")
 
@@ -184,13 +229,25 @@ function MS.SortDropDownPopulate( self, level, menuList )
 	end
 	table.sort( sortList )
 	for _, sf in ipairs( sortList ) do
-		info = UIDropDownMenu_CreateInfo()
+		local info = UIDropDownMenu_CreateInfo()
 		info.text = MS.sortFunctions[sf].text
 		info.value = sf
 		info.notCheckable = true
 		info.func = MS.SetSortFunction
 		UIDropDownMenu_AddButton( info, level )
 	end
+	local info = UIDropDownMenu_CreateInfo()
+	info.text = MS.L["Show Archived"]
+	info.isNotRadio = true
+	info.checked = MS.showArchived
+	info.keepShownOnClick = true   -- menu stays open after toggling
+	info.func = function()
+		MS.showArchived = not MS.showArchived
+		MogShareDisplayFrame_MogListVSlider:SetValue(0)
+		MS.UI_ShowList()
+	end
+	UIDropDownMenu_AddButton( info, level )
+
 	UIDropDownMenu_SetText( self, MS.sortFunctions[MS_Options.sortBy].text )
 end
 function MS.SetSortFunction( info )
@@ -267,11 +324,13 @@ function MS.MogMatched( mogStruct )
 		if dataFun then
 			return MS.MatchesNumbericFilter(mogStruct, dataFun, op, num)
 		end
-
+		if mogStruct.name and string.find( mogStruct.name:lower(), MS.searchFilter ) then
+			return true
+		end
 		if mogStruct.classList and string.find( mogStruct.classList[1]:lower(), MS.searchFilter ) then
 			return true
 		end
-		if string.find( date("%B", mogStruct.lastScan):lower(), MS.searchFilter ) then
+		if string.find( date("%B%Y", mogStruct.lastScan):lower(), MS.searchFilter ) then
 			return true
 		end
 		for k in pairs( mogStruct.playerList or {} ) do
@@ -298,11 +357,12 @@ function MS.UI_ShowList()
 		sortedItems = MS.gameItems
 	else
 		for k in pairs( MS_Data ) do
-			if MS.MogMatched( MS_Data[k] ) then
+			if ((MS.showArchived and MS_Data[k].archived) or (not MS.showArchived and not MS_Data[k].archived))
+					and MS.MogMatched( MS_Data[k] ) then
 				table.insert(sortedItems, k)
 			end
 		end
-		table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy].sortFun)
+		table.sort( sortedItems, MS.sortFunctions[MS_Options.sortBy].sortFun )
 	end
 	local offset = floor(MogShareDisplayFrame_MogListVSlider:GetValue())
 	MogShareDisplayFrame_MogListVSlider:SetMinMaxValues(0, max(0, #sortedItems - #MS.UISet_Buttons))
@@ -320,6 +380,8 @@ function MS.UI_ShowList()
 
 			if MS.gameOn then
 				buttonFrame.ActionButton:SetText(MS.L["Winner"])
+			elseif MS.showArchived then
+				buttonFrame.ActionButton:SetText(MS.L["Restore"])
 			else
 				buttonFrame.ActionButton:SetText(MS.L["Archive"])
 			end
@@ -346,57 +408,61 @@ function MS.UISearchTextChanged(self, userInput)
 		self.Instructions:Hide()
 	end
 
-    MS.searchFilter = self:GetText():lower()
-    MS.UIUpdate()  -- reuse your existing refresh, just have it check MS.searchFilter now
+	MS.searchFilter = self:GetText():lower()
+	MS.UIUpdate()  -- reuse your existing refresh, just have it check MS.searchFilter now
 end
 
 ------
 -- elo functions
 ------
 function MS.PickNextPair()
-    local items = {}
-    for item in pairs(MS_Data) do table.insert(items, item) end
+	local items = {}
+	for item in pairs(MS_Data) do
+		if not MS_Data[item].archived then
+			table.insert(items, item)
+		end
+	end
 
-    -- bias toward under-compared items
-    table.sort(items, function(a, b)
-        return MS_Data[a].eloData.comparisons < MS_Data[b].eloData.comparisons
-    end)
+	-- bias toward under-compared items
+	table.sort(items, function(a, b)
+		return MS_Data[a].eloData.comparisons < MS_Data[b].eloData.comparisons
+	end)
 
-    local poolSize = math.min(10, #items)  -- take the 10 least-compared as the pool
-    local first = items[math.random(poolSize)]
+	local poolSize = math.min(10, #items)  -- take the 10 least-compared as the pool
+	local first = items[math.random(poolSize)]
 
-    -- from the rest, pick whichever is closest in rating to `first`
-    local bestMatch, bestDiff = nil, math.huge
-    for _, item in ipairs(items) do
-        if item ~= first then
-            local diff = math.abs(MS_Data[item].eloData.rating - MS_Data[first].eloData.rating)
-            if diff < bestDiff then
-                bestMatch, bestDiff = item, diff
-            end
-        end
-    end
+	-- from the rest, pick whichever is closest in rating to `first`
+	local bestMatch, bestDiff = nil, math.huge
+	for _, item in ipairs(items) do
+		if item ~= first then
+			local diff = math.abs(MS_Data[item].eloData.rating - MS_Data[first].eloData.rating)
+			if diff < bestDiff then
+				bestMatch, bestDiff = item, diff
+			end
+		end
+	end
 
-    return {first, bestMatch}
+	return {first, bestMatch}
 end
 
 function MS.UpdateElo(winnerItem, loserItem)
 	local K = 32
-    local winner = MS_Data[winnerItem]
-    local loser  = MS_Data[loserItem]
+	local winner = MS_Data[winnerItem]
+	local loser  = MS_Data[loserItem]
 
-    -- expected score: probability winner "should" have won, based on current ratings
-    local expectedWinner = 1 / (1 + 10 ^ ((loser.eloData.rating - winner.eloData.rating) / 400))
-    local expectedLoser  = 1 - expectedWinner
+	-- expected score: probability winner "should" have won, based on current ratings
+	local expectedWinner = 1 / (1 + 10 ^ ((loser.eloData.rating - winner.eloData.rating) / 400))
+	local expectedLoser  = 1 - expectedWinner
 
-    winner.eloData.rating = winner.eloData.rating + K * (1 - expectedWinner)
-    loser.eloData.rating  = loser.eloData.rating  + K * (0 - expectedLoser)
+	winner.eloData.rating = winner.eloData.rating + K * (1 - expectedWinner)
+	loser.eloData.rating  = loser.eloData.rating  + K * (0 - expectedLoser)
 
-    winner.eloData.comparisons = winner.eloData.comparisons + 1
-    loser.eloData.comparisons  = loser.eloData.comparisons + 1
-    winner.eloData.wins   = winner.eloData.wins + 1
-    loser.eloData.losses  = loser.eloData.losses + 1
-    winner.eloData.lastShown = time()
-    loser.eloData.lastShown  = time()
+	winner.eloData.comparisons = winner.eloData.comparisons + 1
+	loser.eloData.comparisons  = loser.eloData.comparisons + 1
+	winner.eloData.wins   = winner.eloData.wins + 1
+	loser.eloData.losses  = loser.eloData.losses + 1
+	winner.eloData.lastShown = time()
+	loser.eloData.lastShown  = time()
 end
 function MS.GetELOProvisionalThreshold()
 	local count = 0
@@ -450,12 +516,24 @@ MS.sortFunctions = {
 	},
 	class = {
 		sortFun = function( a, b )
-			if not MS_Data[a].classList or not MS_Data[b].classList then return false end
+			if not MS_Data[a].classList then return false end
+			if not MS_Data[b].classList then return true end
 			return MS_Data[a].classList[1] < MS_Data[b].classList[1]
 		end,
 		display = function( l )
 			return string.format( "%s", table.concat( MS_Data[l].classList and MS_Data[l].classList or {}, ", " ) )
 		end,
 		text = MS.L["Class"],
+	},
+	name = {
+		sortFun = function( a, b )
+			if not MS_Data[a].name then return false end
+			if not MS_Data[b].name then return true end
+			return MS_Data[a].name < MS_Data[b].name
+		end,
+		display = function( l )
+			return string.format( "%s", MS_Data[l].name or "" )
+		end,
+		text = MS.L["Name"],
 	},
 }
