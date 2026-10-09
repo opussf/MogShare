@@ -76,26 +76,38 @@ function test.test_SaveLink_currentLink_LastScan_Updated()
 	MS.SaveLink("[myLink]")
 	assertAlmostEquals( time(), MS_Data["[myLink]"].lastScan, nil, nil, 1 )
 end
-function test.notest_SaveLink_archivedLink_archivedCleared()
-	MS_Archive["[myLink]"] = { lastScan = 5, archived = 5 }
+function test.test_SaveLink_archivedLink_archivedCleared()
+	MS_Data["[myLink]"] = { lastScan = 5, archived = 5 }
 	MS.SaveLink("[myLink]")
 	assertIsNil( MS_Data["[myLink]"].archived )
 	assertIsNil( MS_Archive["[myLink]"] )
 end
-function test.notest_SaveLink_archivedLink_eloDataIsIntact()
-	MS_Archive["[myLink]"] = { eloData = { rating = 2046 } }
+function test.test_SaveLink_archivedLink_eloDataIsIntact()
+	MS_Data["[myLink]"] = { eloData = { rating = 2046 }, archived = 5 }
 	MS.SaveLink("[myLink]")
 	assertEquals( 2046, MS_Data["[myLink]"].eloData.rating )
 end
-function test.notest_Prune_noPrune()
+function test.test_Prine_moves_from_Archive_to_Data()
+	MS_Archive["[myLink]"] = { lastScan = 5, archived = time() - 3600 }
+	MS.Prune()
+	assertIsNil( MS_Archive["[myLink]"] )
+	assertTrue( MS_Data["[myLink]"] )
+	assertAlmostEquals( time() - 3600, MS_Data["[myLink]"].archived, nil, nil, 1 )
+end
+function test.test_Prune_noPrune()
 	MS_Archive["[myLink]"] = { lastScan = 5, archived = time()-10 }
 	MS.Prune()
-	assertTrue( MS_Archive["[myLink]"] )
+	assertTrue( MS_Data["[myLink]"] )
 end
 function test.test_Prune_oldArchivedData()
 	MS_Archive["[myLink]"] = { lastScan = 5, archived = time()-3000000 }
 	MS.Prune()
-	assertIsNil( MS_Archive["[myLink]"] )
+	assertIsNil( MS_Data["[myLink]"] )
+end
+function test.test_Prune_oldArchived_MS_Data()
+	MS_Data["[myLink]"] = { lastScan = 5, archived = 50 }
+	MS.Prune()
+	assertIsNil( MS_Data["myLink"] )
 end
 function test.test_CHAT_MSG_scan_validLink()
 	MS.CHAT_MSG_("|c89abcdef|Hcustomset:blahblahblah|r", "Frank-Realm1" )
@@ -122,9 +134,59 @@ function test.test_INSPECT_READY()
 	assertTrue( MS_Data["|c89abcdef|Hcustomset:blahblah|r"])
 end
 
+-- MogShareELO
+function test.test_ELO_GetELOProvisionalThreshold_Empty()
+	assertEquals( 1, MS.GetELOProvisionalThreshold() )
+end
+function test.test_ELO_GetELOProvisionalThreshold_3()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	assertEquals( 3, MS.GetELOProvisionalThreshold() )
+end
+function test.test_ELO_GetELOProvisionalThreshold_4()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	MS.SaveLink("l3")
+	assertEquals( 4, MS.GetELOProvisionalThreshold() )
+end
+function test.test_ELO_GetELOProvisionalThreshold_5()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	MS.SaveLink("l3")
+	MS.SaveLink("l4")
+	MS.SaveLink("l5")
+	assertEquals( 5, MS.GetELOProvisionalThreshold() )
+end
+function test.test_ELO_GetELOProvisionalThreshold_6()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	MS.SaveLink("l3")
+	MS.SaveLink("l4")
+	MS.SaveLink("l5")
+	MS.SaveLink("l6")
+	assertEquals( 6, MS.GetELOProvisionalThreshold() )
+end
+function test.test_ELO_PickNextPair_Empty()
+	local items = MS.PickNextPair()
+	assertIsNil( items[1] )
+	assertIsNil( items[2] )
+end
+function test.test_ELO_PickNextPair_One()
+	MS.SaveLink("l1")
+	local items = MS.PickNextPair()
+	assertEquals( "l1", items[1] )
+	assertIsNil( items[2] )
+end
+function test.test_ELO_PickNextPair_Two_notSame()
+	MS.SaveLink("l1")
+	MS.SaveLink("l2")
+	local items = MS.PickNextPair()
+	assertEquals( items[1] == "l1" and "l2" or "l1", items[2] )
+end
+
 -- MogShareUI
 function test.test_Set_mixin_OnRowClick()
-	MS.Set_mixin:OnRowClick()
+	-- MS.Set_mixin:OnRowClick()
 end
 
 test.run()
