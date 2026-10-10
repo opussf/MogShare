@@ -18,3 +18,5 @@ for file in "/Applications/World of Warcraft/_retail_/Screenshots/"*.{png,jpg}; 
 done
 wait
 open new
+
+./make_gif.swift September.gif 0.5 new/*.{png,jpg}
