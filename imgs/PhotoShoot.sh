@@ -22,4 +22,4 @@ done
 wait
 open new
 
-./make_gif.swift September.gif 0.5 new/*.{png,jpg}
+./make_gif.swift September.gif 0.75 new/*.{png,jpg}
