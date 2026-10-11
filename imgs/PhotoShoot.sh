@@ -22,4 +22,6 @@ done
 wait
 open new
 
-./make_gif.swift September.gif 0.75 new/*.{png,jpg}
+read -p "Delete the images you don't want in the gif."
+
+./make_gif.swift current.gif 0.75 new/*.{png,jpg}
