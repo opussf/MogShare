@@ -229,6 +229,63 @@ function MS.MakeMissingItemLists()
 
 	MS.MakeMissingStep()
 end
-function MS.Command(msg)
+function MS.PhotoShoot( param )
+	-- show the frame, and click on the first one
 	MogShareDisplayFrame:Show()
+	MogShareDisplayFrame_MogListVSlider:SetValue(0)
+	MS_MogList_Button1:Click()
+	-- hide some of my frames
+	if INEEDUIListFrame then INEEDUIListFrame:Hide() end
+	if EndeavorFrame then EndeavorFrame:Hide() end
+
+	-- set my prefered view
+	local c=DressUpFrame.ModelScene:GetActiveCamera()
+	c:SetYaw(2.58)
+	c:SetZoomDistance(3.14)
+	-- set the prefered sort, and the search
+	MS.SetSortFunction({value="rank"})
+	MogShareDisplayFrame_SearchBox:SetText(param)
+
+	local n = 1
+	local function z()
+		local b = _G["MS_MogList_Button"..n]
+		if b:IsShown() then
+			b:Click()
+			C_Timer.After( 0.5, function() Screenshot(); end )
+			n = n + 1
+			if n < 16 then
+				C_Timer.After( 1, z )
+			end
+		end
+	end
+	z()
 end
+function MS.ParseCmd( msg )
+	if msg then
+		msg = string.lower( msg )
+		local s, l, c = strfind( msg, "(%S+)" )  -- contiguous string of non-space characters. start, length, matched
+		if s then
+			-- c is the matched string, strsub returns everthing after that, skipping the space
+			return c, strsub( msg, l+2 )
+		else
+			return ""
+		end
+	end
+end
+function MS.Command( msg )
+	local cmd, param = MS.ParseCmd( msg )
+	local cmdFunc = MS.CommandList[cmd]
+	print(cmd, param, cmdFunc)
+	if cmdFunc then
+		cmdFunc.func( param )
+	else
+		MogShareDisplayFrame:Show()
+	end
+end
+
+MS.CommandList = {
+	["photoshoot"] = {
+		["func"] = MS.PhotoShoot,
+		-- no ["help"] makes it hidden, if I ever put in a help.
+	},
+}
