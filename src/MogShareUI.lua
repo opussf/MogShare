@@ -124,10 +124,10 @@ function MS.Set_mixin:OnEnter()
 			end
 		end
 		if MS_Data[self.link].sharedBy then
-			GameTooltip.AddLine(" ")
-			GameTooltip.AddLine(MS.L["Shared by"])
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(MS.L["Shared by:"])
 			local players = {}
-			for pName, ts in paris( MS_Data[self.link].sharedBy ) do
+			for pName, ts in pairs( MS_Data[self.link].sharedBy ) do
 				table.insert( players, {ts=ts, pName=pName} )
 			end
 			table.sort( players, function(a, b) return a.ts > b.ts end )
