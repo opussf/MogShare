@@ -22,6 +22,6 @@ done
 wait
 open new
 
-read -p "Delete the images you don't want in the gif."
+read -p "Delete the images you don't want in the gif, and press Return."
 
 ./make_gif.swift current.gif 0.75 new/*.{png,jpg}
