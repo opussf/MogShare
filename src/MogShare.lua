@@ -275,7 +275,6 @@ end
 function MS.Command( msg )
 	local cmd, param = MS.ParseCmd( msg )
 	local cmdFunc = MS.CommandList[cmd]
-	print(cmd, param, cmdFunc)
 	if cmdFunc then
 		cmdFunc.func( param )
 	else
