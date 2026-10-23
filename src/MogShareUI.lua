@@ -208,7 +208,10 @@ function MS.UIOnShow()
 	MS.UI_BuildItemDisplay()
 	MS.UI_ShowList()
 end
-function MS.UIOnHide()
+function MS.UIOnHide( mogframe )
+	mogframe:ClearAllPoints()
+	mogframe:SetPoint("CENTER", UIParent, "CENTER")
+
 	MS.gameOn = nil
 	MS.gameItems = nil
 end
