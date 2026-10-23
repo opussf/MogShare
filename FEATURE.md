@@ -3,6 +3,7 @@
 ## 1.7/illusions
 
 Scan and record the names of illusions on gear.
+This may need a repair option too.
 
 ## flag for scan
 
