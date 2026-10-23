@@ -230,9 +230,13 @@ function MS.MakeMissingItemLists()
 	MS.MakeMissingStep()
 end
 function MS.PhotoShoot( param )
-	-- show the frame, and click on the first one
+	-- show the frame
 	MogShareDisplayFrame:Show()
 	MogShareDisplayFrame_MogListVSlider:SetValue(0)
+	-- set the prefered sort, and the search
+	MS.SetSortFunction({value="rank"})
+	MogShareDisplayFrame_SearchBox:SetText( param )
+	-- click the first one to open the dressing room.
 	MS_MogList_Button1:Click()
 	-- hide some of my frames
 	if INEEDUIListFrame then INEEDUIListFrame:Hide() end
@@ -242,24 +246,21 @@ function MS.PhotoShoot( param )
 	-- set my prefered view
 	local c=DressUpFrame.ModelScene:GetActiveCamera()
 	c:SetYaw(2.58)
-	c:SetZoomDistance(3.14)
-	-- set the prefered sort, and the search
-	MS.SetSortFunction({value="rank"})
-	MogShareDisplayFrame_SearchBox:SetText(param)
+	c:SetZoomDistance(3.52)
 
 	local n = 1
 	local function z()
 		local b = _G["MS_MogList_Button"..n]
 		if b:IsShown() then
 			b:Click()
-			C_Timer.After( 0.5, function() Screenshot(); end )
+			C_Timer.After( 0.6, function() Screenshot(); end )
 			n = n + 1
 			if n < 16 then
 				C_Timer.After( 1, z )
 			end
 		end
 	end
-	z()
+	C_Timer.After( 1, z )
 end
 function MS.ParseCmd( msg )
 	if msg then
