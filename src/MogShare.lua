@@ -231,6 +231,8 @@ function MS.MakeMissingItemLists()
 end
 function MS.PhotoShoot( param )
 	-- show the frame
+	MS.gameOn = nil
+	MS.gameItems = nil
 	MogShareDisplayFrame:Show()
 	MogShareDisplayFrame_MogListVSlider:SetValue(0)
 	-- set the prefered sort, and the search
