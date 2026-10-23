@@ -237,6 +237,7 @@ function MS.PhotoShoot( param )
 	-- hide some of my frames
 	if INEEDUIListFrame then INEEDUIListFrame:Hide() end
 	if EndeavorFrame then EndeavorFrame:Hide() end
+	if RestedUIFrame then RestedUIFrame:Hide() end
 
 	-- set my prefered view
 	local c=DressUpFrame.ModelScene:GetActiveCamera()
