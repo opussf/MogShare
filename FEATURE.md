@@ -1,6 +1,12 @@
 # FEATURES
 
-## 1.7/recenter
+## 1.7
+
+### sharedby
+
+Add a 'shared by' entry in the tooltip
+
+### recenter
 
 Recenter the app when opening without the Dressing Room
 
