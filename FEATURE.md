@@ -2,6 +2,11 @@
 
 ## 1.7
 
+### illusions
+
+Scan and record the names of illusions on gear.
+This may need a repair option too.
+
 ### photoshoot
 
 Build into the app the ability to capture screenshots based on some commands.

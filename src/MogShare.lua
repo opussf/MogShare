@@ -2,6 +2,7 @@ MS_SLUG, MS = ...
 MS.MSG_ADDONNAME = C_AddOns.GetAddOnMetadata( MS_SLUG, "Title" )
 MS.MSG_VERSION   = C_AddOns.GetAddOnMetadata( MS_SLUG, "Version" )
 MS.MSG_AUTHOR    = C_AddOns.GetAddOnMetadata( MS_SLUG, "Author" )
+MS.SCAN_VERSION  = 2
 
 MS_Data = {}
 MS_Options = { sortBy = "lastScan" }
@@ -173,6 +174,7 @@ end
 function MS.ScanItems( mogLink )
 	local list = C_TransmogCollection.GetItemTransmogInfoListFromCustomSetHyperlink( mogLink )
 	if list then
+		MS_Data[mogLink].scanVersion = MS.SCAN_VERSION
 		MS_Data[mogLink].itemNames = {}
 		for slot, itemInfo in pairs( list ) do
 			local sourceInfo = C_TransmogCollection.GetAppearanceSourceInfo( itemInfo.appearanceID )
@@ -187,6 +189,11 @@ function MS.ScanItems( mogLink )
 						MS_Data[mogLink].itemNames[itemName] = true
 					end)
 				end
+			end
+			local illusionName, illusionLink = C_TransmogCollection.GetIllusionStrings( itemInfo.illusionID )
+			-- local name, hyperlink, sourceText = C_TransmogCollection.GetIllusionStrings(illusionID)
+			if illusionName then
+				MS_Data[mogLink].itemNames[string.format(TRANSMOGRIFIED_ENCHANT, illusionName)] = true
 			end
 		end
 	end
@@ -220,7 +227,7 @@ function MS.MakeMissingItemLists()
 
 	MS.scanCO = coroutine.create(function()
 		for mogLink, data in pairs(MS_Data) do
-			if not data.itemNames then
+			if not data.itemNames or (data.scanVersion or 1) < MS.SCAN_VERSION then
 				MS.ScanItems( mogLink )
 				coroutine.yield()
 			end
