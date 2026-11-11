@@ -20,6 +20,18 @@ function test.after()
 	Units["target"] = nil
 end
 
+function test.test_parseCmd_noCmd_returnsNil()
+	assertIsNil(MS.ParseCmd())
+end
+function test.test_parseCmd_returnsLowerCmd()
+	local cmd, param = MS.ParseCmd("    Photoshoot ksjdhf")
+	assertEquals("photoshoot", cmd)
+	assertEquals("ksjdhf", param)
+end
+function test.test_parseCmd_spaces_retrunsBlank()
+	assertEquals("", MS.ParseCmd("          "))
+end
+
 function test.test_OnLoad_PLAYER_TARGET_CHANGED()
 	MS.OnLoad()
 	assertTrue( MogShareFrame.Events.PLAYER_TARGET_CHANGED )
