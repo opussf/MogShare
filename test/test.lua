@@ -15,6 +15,7 @@ function test.before()
 	MS_Archive = {}
 	MS.provisionalThreshold = nil
 	MogShareFrame.Events.INSPECT_READY = nil
+	MogShareDisplayFrame:Hide()
 end
 function test.after()
 	Units["target"] = nil
@@ -30,6 +31,15 @@ function test.test_parseCmd_returnsLowerCmd()
 end
 function test.test_parseCmd_spaces_retrunsBlank()
 	assertEquals("", MS.ParseCmd("          "))
+end
+
+function test.test_unknownCommand()
+	MS.Command("unknown")
+	assertTrue( MogShareDisplayFrame.__isShown, "Frame should be shown." )
+end
+function test.notest_photoshoot()
+	MS.Command("PhotoShoot")
+	assertTrue( MogShareDisplayFrame.__isShown, "Frame should be shown." )
 end
 
 function test.test_OnLoad_PLAYER_TARGET_CHANGED()
