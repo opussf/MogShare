@@ -320,7 +320,7 @@ MS.localizedFields = {
 }
 
 function MS.ParseNumericFilter(textIn)
-	local field, op, num = textIn:match("^(.+)%s*([<>=]+)%s*(%-?%d+)$")
+	local field, op, num = textIn:match("^([^<>=%s]+)%s*([<>=]+)%s*(%-?%d+)$")
 
 	local localField = field and MS.localizedFields[field]
 
