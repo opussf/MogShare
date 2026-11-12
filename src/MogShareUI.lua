@@ -83,6 +83,7 @@ function MS.Set_mixin:OnActionButtonClick(button)
 		MS_Data[self.link].archived = time()
 	end
 	MS.provisionalThreshold = MS.GetELOProvisionalThreshold()
+	MS.sortedItems = nil
 	MS.UI_ShowList()
 end
 function MS.Set_mixin:OnEnter()
