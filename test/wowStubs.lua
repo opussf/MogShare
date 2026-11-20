@@ -1,7 +1,7 @@
 -----------------------------------------
 -- Author  :  Opussf
--- Date    :  July 24 2026
--- Revision:  9.7.1-15-g6904026
+-- Date    :  November 17 2026
+-- Revision:  9.7.1-19-gcae33a0
 -----------------------------------------
 -- These are functions from wow that have been needed by addons so far
 -- Not a complete list of the functions.
@@ -359,6 +359,7 @@ strlower = string.lower
 strlen = string.len
 time = os.time
 date = os.date
+GetTime = os.clock
 max = math.max
 min = math.min
 abs = math.abs
@@ -644,6 +645,8 @@ function CreateFontString( name, ... )
 	FontString.text = ""
 	FontString["SetText"] = function(self,text) self.textValue=text; end
 	FontString["GetText"] = function(self) return(self.textValue); end
+	FontString["SetTextColor"] = function(self, r, g, b); end
+	FontString["SetShadowOffset"] = function(self, x, y); end
 	FontString.name=name
 	--print("FontString made?")
 	return FontString
@@ -1126,14 +1129,6 @@ end
 function GetItemCount( itemID, includeBank, includeUses, includeReagentBank, includeAccountBank )
 	-- print( itemID, myInventory[itemID] )
 	return myInventory[itemID] or 0
-end
-function GetItemInfo( itemIn )
-	-- itemID is number, link or 'item:#####'
-	-- returns name, itemLink
-	local itemID = __getItemID( itemIn )
-	if Items[itemID] then
-		return Items[itemID].name, Items[itemID].link
-	end
 end
 function GetLocale()
 	return myLocale
@@ -2126,6 +2121,14 @@ end
 function C_Item.IsBound( itemLocation )
 	return false
 end
+function C_Item.GetItemInfo( itemIn )
+	-- itemID is number, link or 'item:#####'
+	-- returns name, itemLink
+	local itemID = __getItemID( itemIn )
+	if Items[itemID] then
+		return Items[itemID].name, Items[itemID].link
+	end
+end
 
 ----------
 -- Menu
@@ -2556,6 +2559,13 @@ end
 function C_Garrison.GetPendingShipmentInfo( index )
 	-- returns
 	return "herbs", 263455, 1, 238763, "nil", 14400, C_Garrison.testData[C_Garrison.plotID].shipments[index]
+end
+
+--------
+-- C_HousingCatalog
+--------
+C_HousingCatalog = {}
+function C_HousingCatalog.GetCatalogEntryInfoByItem( itemID )
 end
 
 ---------
